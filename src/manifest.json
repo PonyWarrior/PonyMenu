@@ -1,0 +1,10 @@
+{
+    "name": "PonyWarrior-PonyMenu",
+    "version_number": "0.7.1",
+    "website_url": "https://github.com/PonyWarrior/PonyMenu",
+    "description": "",
+    "dependencies": [
+      "SGG_Modding-DemonDaemon-1.0.0",
+      "SGG_Modding-ModUtil-3.0.0"
+    ]
+  }
