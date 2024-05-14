@@ -5,7 +5,7 @@ schemaVersion = "0.7.1"
 [package]
 namespace = "PonyWarrior"
 name = "PonyMenu"
-versionNumber = "0.0.0"
+versionNumber = "0.7.1"
 description = "Allows to do some super duper thing."
 websiteUrl = "https://github.com/PonyWarrior/PonyMenu"
 containsNsfwContent = false
