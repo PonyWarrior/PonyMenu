@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.3] - 2024-05-15
+
 ### Fixed
 
 - Thunderstore fixes
@@ -22,5 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.7.2...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.7.3...HEAD
+[0.7.3]: https://github.com/PonyWarrior/PonyMenu/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/PonyWarrior/PonyMenu/compare/013ff8c60de07956d7d0b7629076b09d4cad44dc...0.7.2
