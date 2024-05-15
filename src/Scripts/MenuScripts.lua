@@ -239,9 +239,11 @@ function mod.BoonSelectorLoadPage(screen)
 					text = upgradeData.CustomRarityName
 				end
 
-				local color = Color["BoonPatch" .. rarity]
+				color = Color["BoonPatch" .. rarity]
 				if upgradeData.CustomRarityColor then
 					color = upgradeData.CustomRarityColor
+				elseif upgradeData.CustomRarityName == "Boon_Infusion" then
+					color = Color.BoonPatchElemental
 				end
 				--#region Text
 				local rarityText = ShallowCopyTable(screendata.RarityText)
@@ -1050,10 +1052,6 @@ function mod.BoonManagerLoadPage(screen)
 					ShadowOffset = { 0, 2 },
 					Justification = "Center"
 				})
-				SetColor({
-					Id = screen.Components[purchaseButtonKeyBG].Id,
-					Color = Color["BoonPatch" .. boonData.boon.Rarity]
-				})
 
 				local screendata = DeepCopyTable(ScreenData.UpgradeChoice)
 				local upgradeName = boonData.boon.Name
@@ -1143,10 +1141,16 @@ function mod.BoonManagerLoadPage(screen)
 					text = upgradeData.CustomRarityName
 				end
 
-				local color = Color["BoonPatch" .. rarity]
+				color = Color["BoonPatch" .. rarity]
 				if upgradeData.CustomRarityColor then
 					color = upgradeData.CustomRarityColor
+				elseif upgradeData.CustomRarityName == "Boon_Infusion" then
+					color = Color.BoonPatchElemental
 				end
+				SetColor({
+					Id = screen.Components[purchaseButtonKeyBG].Id,
+					Color = color
+				})
 				--#region Text
 				local rarityText = ShallowCopyTable(screendata.RarityText)
 				rarityText.FontSize = 24
