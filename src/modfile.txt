@@ -9,12 +9,6 @@ Import Text/zh-TW.lua
 Import core.lua
 Import Scripts/MenuScripts.lua
 Import Data/ScreenData.lua
-Import Data/RoomData.lua
 
 To Scripts/ResourceData.lua
 Import Data/ResourceData.lua
-
-To Maps/Bin/PonyMenuRoom.thing_bin
-Replace Maps/PonyMenuRoom.thing_bin
-To Maps/PonyMenuRoom.map_text
-Replace Maps/PonyMenuRoom.map_text
