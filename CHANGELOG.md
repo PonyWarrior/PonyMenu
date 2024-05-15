@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Thunderstore fixes
+
 ## [0.7.2] - 2024-05-15
 
-Fix infusion color in boon selector and manager
-Fix being unable to upgrade rarity of certain boons like hermes and chaos
+### Fixed
+
+- Fix infusion color in boon selector and manager
+- Fix being unable to upgrade rarity of certain boons like hermes and chaos
 
 ### Added
 
