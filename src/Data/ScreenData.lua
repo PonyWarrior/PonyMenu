@@ -612,6 +612,14 @@ function mod.setupCommandData()
 			Type = "Command",
 			Function = "PonyMenu.OpenResourceMenu"
 		},
+		{
+			IconPath = "GUI\\Screens\\Inventory\\Icon-Resources",
+			IconScale = 0.6,
+			Name = mod.Locale.ResourceMenuTitle,
+			Description = mod.Locale.ResourceMenuDescription,
+			Type = "Command",
+			Function = "PonyMenu.GoToTrainingRoom"
+		},
 	}
 end
 

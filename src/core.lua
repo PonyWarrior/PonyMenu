@@ -458,6 +458,17 @@ function mod.IsBoonTrait(traitName)
 	end
 end
 
+function mod.GoToTrainingRoom()
+	LoadMap({ Name = "PonyMenuRoom" })
+	Activate({ Name = "SpawnPointsPhase2" })
+	-- Teleport({ Id = CurrentRun.Hero.ObjectId, DestinationId = 625757 })
+end
+
+ModUtil.Path.Wrap("SetupMap", function(baseFunc)
+	LoadPackages({ Name = "Tartarus" })
+	return baseFunc()
+end)
+
 ModUtil.LoadOnce(function()
 	for key, value in pairs(mod.BoonData) do
 		mod.PopulateBoonData(key)
