@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2024-05-20
+
 ### Fixed
 
 - Fixed all mode rarity affecting keepsakes and altar cards
@@ -55,7 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.8.0...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.7.5...0.8.0
 [0.7.5]: https://github.com/PonyWarrior/PonyMenu/compare/0.7.4...0.7.5
 [0.7.4]: https://github.com/PonyWarrior/PonyMenu/compare/0.7.3...0.7.4
