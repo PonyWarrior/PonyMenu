@@ -339,10 +339,11 @@ function mod.BoonSelectorLoadPage(screen)
 end
 
 --#endregion
+
 --#region RESOURCE MENU
 
 function mod.OpenResourceMenu(screen, button)
-	if IsScreenOpen("BoonSelector") then
+	if IsScreenOpen("ResourceMenu") then
 		return
 	end
 	mod.UpdateScreenData()
@@ -532,6 +533,7 @@ function mod.ResourceMenuLoadPage(screen)
 end
 
 --#endregion
+
 --#region BOON MANAGER
 
 function mod.OpenBoonManager(screen, button)
@@ -767,7 +769,8 @@ function mod.HandleBoonManagerClick(screen, button)
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
 				screen.Traits = CurrentRun.Hero.Traits
 				local numTraits = traitData.StackNum or 1
-				if numTraits < 100 and traitData.RemainingUses == nil and IsGodTrait(traitData.Name) and not traitData.BlockStacking and (not traitData.RequiredFalseTrait or traitData.RequiredFalseTrait ~= traitData.Name) then
+				if numTraits < 100 and traitData.RemainingUses == nil and IsGodTrait(traitData.Name) and not traitData.BlockStacking
+					and (not traitData.RequiredFalseTrait or traitData.RequiredFalseTrait ~= traitData.Name) and mod.IsBoonManagerValid(traitData.Name) then
 					upgradableTraits[traitData.Name] = true
 				end
 			end
@@ -798,7 +801,7 @@ function mod.HandleBoonManagerClick(screen, button)
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
 				screen.Traits = CurrentRun.Hero.Traits
 				local numTraits = traitData.StackNum or 1
-				if numTraits > 1 and IsGodTrait(traitData.Name) and TraitData[traitData.Name] and IsGameStateEligible(CurrentRun, TraitData[traitData.Name]) and traitData.Rarity ~= "Legendary" then
+				if numTraits > 1 and IsGodTrait(traitData.Name) and TraitData[traitData.Name] and IsGameStateEligible(CurrentRun, TraitData[traitData.Name]) and traitData.Rarity ~= "Legendary" and mod.IsBoonManagerValid(traitData.Name) then
 					upgradableTraits[traitData.Name] = true
 				end
 			end
@@ -827,7 +830,8 @@ function mod.HandleBoonManagerClick(screen, button)
 			local upgradableTraits = {}
 			local upgradedTraits = {}
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
-				if TraitData[traitData.Name] and traitData.Rarity ~= nil and GetUpgradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil and traitData.RarityLevels[GetUpgradedRarity(traitData.Rarity)] ~= nil then
+				if TraitData[traitData.Name] and traitData.Rarity ~= nil and GetUpgradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil
+					and traitData.RarityLevels[GetUpgradedRarity(traitData.Rarity)] ~= nil and mod.IsBoonManagerValid(traitData.Name) then
 					if Contains(upgradableTraits, traitData) or traitData.Rarity == "Legendary" then
 					else
 						table.insert(upgradableTraits, traitData)
@@ -864,7 +868,8 @@ function mod.HandleBoonManagerClick(screen, button)
 			local upgradableTraits = {}
 			local upgradedTraits = {}
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
-				if TraitData[traitData.Name] and traitData.Rarity ~= nil and GetDowngradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil and traitData.RarityLevels[GetDowngradedRarity(traitData.Rarity)] ~= nil then
+				if TraitData[traitData.Name] and traitData.Rarity ~= nil and GetDowngradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil
+					and traitData.RarityLevels[GetDowngradedRarity(traitData.Rarity)] ~= nil and mod.IsBoonManagerValid(traitData.Name) then
 					if Contains(upgradableTraits, traitData) or traitData.Rarity == "Legendary" then
 					else
 						table.insert(upgradableTraits, traitData)
@@ -1003,6 +1008,8 @@ function mod.BoonManagerChangePage(screen, button)
 		mod.BoonManagerLoadPage(screen)
 	elseif button.Menu == "BoonSelector" then
 		mod.BoonSelectorLoadPage(screen)
+	elseif button.Menu == "ConsumableSelector" then
+		mod.ConsumableSelectorLoadPage(screen)
 	end
 end
 
@@ -1332,6 +1339,306 @@ function mod.MouseOffBoonButton(button)
 	components.InventorySlotHighlight = nil
 	SetScale({ Id = button.Id, Fraction = 1.0, Duration = 0.1, SkipGeometryUpdate = true })
 	StopFlashing({ Id = button.Id })
+end
+
+--#endregion
+
+--#region BOSS SELECTOR
+
+function mod.OpenBossSelector()
+	if IsScreenOpen("BossSelector") then
+		return
+	end
+
+	local screen = DeepCopyTable(ScreenData.BossSelector)
+	screen.SelectedGod = mod.Data.SelectedGod or "No God selected"
+	local components = screen.Components
+	local children = screen.ComponentData.Background.Children
+	HideCombatUI(screen.Name)
+	OnScreenOpened(screen)
+	CreateScreenFromData(screen, screen.ComponentData)
+
+	SetColor({ Id = components.BackgroundTint.Id, Color = Color.Black })
+	SetAlpha({ Id = components.BackgroundTint.Id, Fraction = 0.9, Duration = 0.3 })
+
+	--Display
+
+	if mod.Data.SavedState then
+		local index = 0
+		local rowOffset = 400
+		local columnOffset = 400
+		local boonsPerRow = 4
+		local rowsPerPage = 99
+		local rowoffsetX = 350
+		local rowoffsetY = 350
+
+		for _, value in ipairs(screen.ItemOrder) do
+			if GameState.RoomCountCache[value] then
+				local boss = screen.BossData[value]
+				boss.Room = DeepCopyTable(RoomData[value])
+
+				local key = "Boss" .. index
+				local buttonKey = "Button" .. index
+				local fraction = 0.1
+				local rowIndex = math.floor(index / boonsPerRow)
+				local offsetX = rowoffsetX + columnOffset * (index % boonsPerRow)
+				local offsetY = rowoffsetY + rowOffset * (rowIndex % rowsPerPage)
+				index = index + 1
+
+				components[buttonKey] = CreateScreenComponent({
+					Name = "ButtonDefault",
+					Scale = 1.0,
+					Group = "Combat_Menu_TraitTray",
+					Color = Color.White
+				})
+				components[buttonKey].Image = key
+				components[buttonKey].Boss = boss
+				components[buttonKey].Index = index
+				SetScaleX({ Id = components[buttonKey].Id, Fraction = 0.69 })
+				SetScaleY({ Id = components[buttonKey].Id, Fraction = 3.8 })
+				components[key] = CreateScreenComponent({
+					Name = "BlankObstacle",
+					Scale = 1.2,
+					Group = "Combat_Menu_TraitTray"
+				})
+
+				SetThingProperty({ Property = "Ambient", Value = 0.0, DestinationId = components[key].Id })
+				components[buttonKey].OnPressedFunctionName = mod.HandleBossSelection
+				fraction = 1.0
+
+				SetAlpha({ Ids = { components[key].Id, components[buttonKey].Id }, Fraction = 0 })
+				SetAlpha({ Ids = { components[key].Id, components[buttonKey].Id }, Fraction = fraction, Duration = 0.9 })
+				SetAnimation({ DestinationId = components[key].Id, Name = boss.Portrait, Scale = 0.4 })
+				local delay = RandomFloat(0.1, 0.5)
+				Move({
+					Ids = { components[key].Id, components[buttonKey].Id },
+					OffsetX = offsetX,
+					OffsetY = offsetY,
+					Duration = delay
+				})
+				local titleText = ShallowCopyTable(screen.TitleText)
+				titleText.Id = components[buttonKey].Id
+				titleText.Text = boss.Name
+				CreateTextBox(titleText)
+			end
+		end
+	else
+		local txt = mod.Locale.BossSelectorNoSavedState
+
+		components.Infobox = CreateScreenComponent({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray" })
+		Attach({ Id = components.Infobox.Id, DestinationId = components.Background.Id, OffsetX = 0, OffsetY = 0 })
+		CreateTextBox({
+			Id = components.Infobox.Id,
+			Text = txt,
+			FontSize = 80,
+			OffsetX = 0,
+			OffsetY = 0,
+			-- Width = 720,
+			Color = Color.Red,
+			Font = "P22UndergroundSCMedium",
+			ShadowBlur = 0,
+			ShadowColor = { 0, 0, 0, 1 },
+			ShadowOffset = { 0, 2 },
+			Justification = "Center"
+		})
+	end
+
+	--
+
+	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = "Combat_Menu_TraitTray" })
+	screen.KeepOpen = true
+	HandleScreenInput(screen)
+end
+
+function mod.HandleBossSelection(screen, button)
+	if mod.Data.SavedState == nil then
+		return
+	end
+	local boss = button.Boss
+	mod.CloseBossSelectScreen(screen)
+
+	boss.Room.KillHeroOnCompletion = true
+
+	boss.Room.NoReward = true
+	boss.Room.ForcedReward = nil
+	boss.Room.HasHarvestPoint = false
+	boss.Room.HasShovelPoint = false
+	boss.Room.HasPickaxePoint = false
+	boss.Room.HasFishingPoint = false
+	boss.Room.HasExorcismPoint = false
+	boss.Room.TimeChallengeSwitchSpawnChance = 0.0
+	boss.Room.WellShopSpawnChance = 0.0
+	boss.Room.SecretSpawnChance = 0.0
+	mod.StartNewCustomRun(boss.Room)
+end
+
+function mod.CloseBossSelectScreen(screen)
+	ShowCombatUI(screen.Name)
+	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = nil })
+	OnScreenCloseStarted(screen)
+	CloseScreen(GetAllIds(screen.Components), 0.15)
+	OnScreenCloseFinished(screen)
+	notifyExistingWaiters("BossSelector")
+end
+
+--#endregion
+
+--#region CONSUMABLE SELECTOR
+
+function mod.OpenConsumableSelector()
+	if IsScreenOpen("ConsumableSelector") then
+		return
+	end
+	mod.UpdateScreenData()
+
+	local screen = DeepCopyTable(ScreenData.ConsumableSelector)
+	screen.Amount = 0
+	screen.FirstPage = 0
+	screen.LastPage = 0
+	screen.CurrentPage = screen.FirstPage
+	local components = screen.Components
+
+	OnScreenOpened(screen)
+	HideCombatUI(screen.Name)
+	CreateScreenFromData(screen, screen.ComponentData)
+	--Display
+	local displayedConsumables = {}
+	local index = 0
+	screen.ConsumableList = {}
+	for k, consumable in pairs(mod.ConsumableData) do
+		if not Contains(displayedConsumables, consumable) then
+			table.insert(displayedConsumables, consumable)
+			local rowOffset = 100
+			local columnOffset = 400
+			local boonsPerRow = 4
+			local rowsPerPage = 7
+			local rowIndex = math.floor(index / boonsPerRow)
+			local pageIndex = math.floor(rowIndex / rowsPerPage)
+			local offsetX = screen.RowStartX + columnOffset * (index % boonsPerRow)
+			local offsetY = screen.RowStartY + rowOffset * (rowIndex % rowsPerPage)
+			index = index + 1
+			screen.LastPage = pageIndex
+			if screen.ConsumableList[pageIndex] == nil then
+				screen.ConsumableList[pageIndex] = {}
+			end
+			table.insert(screen.ConsumableList[pageIndex], {
+				index = index,
+				consumable = consumable,
+				pageIndex = pageIndex,
+				offsetX = offsetX,
+				offsetY = offsetY,
+				key = k
+			})
+		end
+	end
+	mod.ConsumableSelectorLoadPage(screen)
+	--
+
+	SetColor({ Id = components.BackgroundTint.Id, Color = Color.Black })
+	SetAlpha({ Id = components.BackgroundTint.Id, Fraction = 0.0, Duration = 0 })
+	SetAlpha({ Id = components.BackgroundTint.Id, Fraction = 0.9, Duration = 0.3 })
+	wait(0.3)
+
+	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = "Combat_Menu_TraitTray" })
+	screen.KeepOpen = true
+	HandleScreenInput(screen)
+end
+
+function mod.CloseConsumableSelector(screen)
+	ShowCombatUI(screen.Name)
+	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = nil })
+	OnScreenCloseStarted(screen)
+	CloseScreen(GetAllIds(screen.Components), 0.15)
+	OnScreenCloseFinished(screen)
+	notifyExistingWaiters("ConsumableSelector")
+end
+
+function mod.ConsumableSelectorLoadPage(screen)
+	mod.BoonManagerPageButtons(screen, screen.Name)
+	local displayedConsumables = {}
+	local pageConsumables = screen.ConsumableList[screen.CurrentPage]
+	if pageConsumables then
+		for i, consumableData in pairs(pageConsumables) do
+			if displayedConsumables[consumableData] or displayedConsumables[consumableData] then
+				--Skip
+			else
+				local purchaseButtonKey = "PurchaseButton" .. consumableData.index
+				consumableData.consumable.ObjectId = purchaseButtonKey
+				screen.Components[purchaseButtonKey] = CreateScreenComponent({
+					Name = "ButtonDefault",
+					Group = "Combat_Menu_TraitTray",
+					Scale = 1.2,
+					ScaleX = 1.15,
+					ToDestroy = true
+				})
+				SetInteractProperty({
+					DestinationId = screen.Components[purchaseButtonKey].Id,
+					Property = "TooltipOffsetY",
+					Value = 100
+				})
+				screen.Components[purchaseButtonKey].OnPressedFunctionName = mod.GiveConsumableToPlayer
+				screen.Components[purchaseButtonKey].Consumable = consumableData.consumable
+				screen.Components[purchaseButtonKey].Index = consumableData.index
+
+				-- local data = ResourceData[consumableData.consumable]
+				if consumableData.consumable.DoorIcon then
+					local icon = {
+						Name = "BlankObstacle",
+						Animation = consumableData.consumable.DoorIcon,
+						Scale = 0.5,
+						Group = "Combat_Menu_TraitTray",
+						ToDestroy = true
+					}
+					screen.Components[purchaseButtonKey .. "Icon"] = CreateScreenComponent(icon)
+					screen.Components[purchaseButtonKey].Icon = screen.Components[purchaseButtonKey .. "Icon"]
+				end
+				Attach({
+					Id = screen.Components[purchaseButtonKey].Id,
+					DestinationId = screen.Components.Background.Id,
+					OffsetX = consumableData.offsetX,
+					OffsetY = consumableData.offsetY
+				})
+
+				-- local text = consumableData.consumable.UseText
+				-- text = text:gsub("Use", ""):gsub("Drop", "")
+				local text = consumableData.key
+
+				CreateTextBox({
+					Id = screen.Components[purchaseButtonKey].Id,
+					Text = text,
+					FontSize = 22,
+					OffsetX = 0,
+					OffsetY = -5,
+					Width = 720,
+					Color = Color.White,
+					Font = "P22UndergroundSCMedium",
+					ShadowBlur = 0,
+					ShadowColor = { 0, 0, 0, 1 },
+					ShadowOffset = { 0, 2 },
+					Justification = "Center"
+				})
+				if consumableData.consumable.DoorIcon then
+					Attach({
+						Id = screen.Components[purchaseButtonKey .. "Icon"].Id,
+						DestinationId = screen.Components[purchaseButtonKey].Id,
+						OffsetX = -150
+					})
+				end
+			end
+		end
+	end
+end
+
+function mod.GiveConsumableToPlayer(screen, button)
+	-- MapState.RoomRequiredObjects = {}
+	if button.Consumable.UseFunctionName and button.Consumable.UseFunctionName == "OpenTalentScreen" then
+		if not CurrentRun.ConsumableRecord["SpellDrop"] then
+			PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo" })
+			return
+		end
+		mod.CloseConsumableSelector(screen)
+	end
+	UseConsumableItem(button.Consumable, {}, CurrentRun.Hero)
 end
 
 --#endregion

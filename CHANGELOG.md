@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed all mode rarity affecting keepsakes and altar cards
+
+### Added
+
+- Save State
+- Load State
+- Boss Selector
+- Consumable Selector (WIP)
+
 ## [0.8.0] - 2024-05-18
 
 ### Added

@@ -29,5 +29,23 @@ mod.AddLocale("zh-CN", {
 	ResourceMenuTitle = "资源选单",
 	ResourceMenuDescription = "创造任何数量的资源。",
 	ResourceMenuSpawnButton = "创造资源",
-	ResourceMenuEmpty = "空"
+	ResourceMenuEmpty = "空",
+
+	BossSelectorTitle = "区域守卫选择器",
+	BossSelectorDescription = "让您直接去打一位区域守卫，用您的存档装备。",
+	BossSelectorNoSavedState = "没有存档装备! 请去造一个!",
+
+	KillPlayerTitle = "杀玩家",
+	KillPlayerDescription = "杀您而遣送您到三岔路口。",
+
+	SaveStateTitle = "存入装备",
+	SaveStateDescription = "存入您现在的装备，为了一后加载。必要为了用区域守卫选择器。存入您全部装备。",
+	SaveStateSaved = "装备存入了!",
+
+	LoadStateTitle = "加载装备",
+	LoadStateDescription = "加载您的存档装备。必要先存入一个装备。",
+	SaveStateLoaded = "装备加载了!",
+
+	ConsumableSelectorTitle = "耗材选择器",
+	ConsumableSelectorDescription = "自己给您如何耗材。"
 })
