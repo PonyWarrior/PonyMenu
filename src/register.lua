@@ -1,1 +1,0 @@
-return ModUtil.Mod.Register("PonyMenu")

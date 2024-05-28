@@ -1,8 +1,4 @@
-local mod = PonyMenu
-
-if not mod.Config.Enabled then return end
-
-mod.AddLocale("en", {
+public.AddLocale("en", {
 	PonyMenuCategoryTitle = "Pony Menu",
 
 	ClearAllBoons = "Clear all boons",

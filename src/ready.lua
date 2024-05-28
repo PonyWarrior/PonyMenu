@@ -1,6 +1,24 @@
-local mod = PonyMenu
+---@meta _
+-- globals we define are private to our plugin!
+---@diagnostic disable: lowercase-global
 
-if not mod.Config.Enabled then return end
+-- here is where your mod sets up all the things it will do.
+-- this file will not be reloaded if it changes during gameplay
+-- 	so you will most likely want to have it reference
+--	values and functions later defined in `reload.lua`.
+
+mod = modutil.mod.Mod.Register(_PLUGIN.guid)
+
+mod.Locales = mod.Locales or {}
+
+function mod.GetLanguageString(path)
+	local locale = mod.Locales[GetLanguage()] or mod.Locales.en
+	return ModUtil.Path.Get(path, locale) or ModUtil.Path.Get(path, mod.Locales.en)
+end
+
+function public.AddLocale(lang, data)
+	mod.Locales[lang] = data
+end
 
 local function setupMainData()
 	mod.CurrentLocale = GetLanguage()
@@ -421,7 +439,7 @@ end
 function mod.GetLootColor(upgradeName)
 	local godName = string.gsub(upgradeName, 'Upgrade', '')
 	local color = Color.Black
-	if mod.Config.ColorblindMode == true then
+	if config.ColorblindMode == true then
 		return color
 	end
 	if LootSetData[godName] ~= nil then
@@ -452,7 +470,7 @@ end
 
 function mod.GetLootColorFromTrait(traitName)
 	local color = Color.Red
-	if mod.Config.ColorblindMode == true then
+	if config.ColorblindMode == true then
 		return color
 	end
 	for upgradeName, boonData in pairs(mod.BoonData) do
@@ -546,10 +564,7 @@ function mod.CreateNewCustomRun(room)
 	-- EquipFamiliar(nil, { Unit = CurrentRun.Hero, FamiliarName = GameState.EquippedFamiliar, SkipNewTraitHighlight = true })
 	-- EquipWeaponUpgrade(CurrentRun.Hero, { SkipNewTraitHighlight = true })
 	-- EquipMetaUpgrades(CurrentRun.Hero, { SkipNewTraitHighlight = true })
-	mod.LoadState(true)
 	UpdateRunHistoryCache(CurrentRun)
-	BuildMetaupgradeCache()
-
 
 	CurrentRun.BonusUnusedWeaponName = GetRandomUnequippedWeapon()
 	CurrentRun.ActiveBiomeTimer = GetNumShrineUpgrades("BiomeSpeedShrineUpgrade") > 0
@@ -558,7 +573,7 @@ function mod.CreateNewCustomRun(room)
 	CurrentRun.ActiveBounty = args.ActiveBounty
 	CurrentRun.ActiveBountyClears = GameState.PackagedBountyClears[CurrentRun.ActiveBounty] or 0
 	CurrentRun.ActiveBountyAttempts = GameState.PackagedBountyAttempts[CurrentRun.ActiveBounty] or 0
-	CurrentRun.SpellCharge = 5000
+
 	CurrentRun.ResourceNodesSeen = {}
 
 	if ConfigOptionCache.EasyMode then
@@ -620,6 +635,8 @@ function mod.StartNewCustomRun(room)
 	AddTimerBlock(CurrentRun, "MapLoad")
 
 	LoadMap({ Name = currentRun.CurrentRoom.Name, ResetBinks = true })
+	mod.LoadState(true)
+	BuildMetaupgradeCache()
 end
 
 function mod.KillPlayer()
@@ -640,6 +657,7 @@ function mod.SaveState()
 			Keepsake = GameState.LastAwardTrait,
 			Assist = GameState.LastAssistTrait,
 			Familiar = GameState.EquippedFamiliar,
+			Hex = nil
 		}
 		for i, traitData in pairs(CurrentRun.Hero.Traits) do
 			if
@@ -650,10 +668,12 @@ function mod.SaveState()
 				and traitData.Name ~= mod.Data.SavedState.Assist
 				and traitData.Name ~= mod.Data.SavedState.Familiar
 			then
-				table.insert(mod.Data.SavedState.Traits, { Name = traitData.Name, Rarity = traitData.Rarity, StackNum = traitData.StackNum })
+				if traitData.Slot and traitData.Slot == "Spell" then
+					mod.Data.SavedState.Hex = traitData.Name
+				else
+					table.insert(mod.Data.SavedState.Traits, { Name = traitData.Name, Rarity = traitData.Rarity, StackNum = traitData.StackNum })
+				end
 			elseif traitData.MetaUpgrade then
-
-
 				table.insert(mod.Data.SavedState.MetaUpgrades, {
 					TraitName = traitData.Name,
 					Rarity = traitData.Rarity,
@@ -697,7 +717,13 @@ function mod.LoadState(newRun)
 			EquipFamiliar(nil, { Unit = CurrentRun.Hero, FamiliarName = mod.Data.SavedState.Familiar, SkipNewTraitHighlight = true })
 		end
 		if mod.Data.SavedState.Aspect.Name ~= nil then
-			AddTraitToHero({ TraitName = mod.Data.SavedState.Aspect.Name, Rarity = mod.Data.SavedState.Aspect.Rarity })
+			AddTraitToHero({
+				TraitName = mod.Data.SavedState.Aspect.Name,
+				Rarity = mod.Data.SavedState.Aspect.Rarity,
+				SkipNewTraitHighlight = true,
+				SkipQuestStatusCheck = true,
+				SkipActivatedTraitUpdate = true,
+			})
 		end
 		for _, traitData in pairs(mod.Data.SavedState.Traits) do
 			AddTraitToHero({
@@ -707,12 +733,26 @@ function mod.LoadState(newRun)
 					Rarity = traitData.Rarity,
 					StackNum = traitData.StackNum
 				}),
-				SkipNewTraitHighlight = true
+				SkipNewTraitHighlight = true,
+				SkipQuestStatusCheck = true,
+				SkipActivatedTraitUpdate = true,
 			})
+		end
+		if mod.Data.SavedState.Hex ~= nil then
+			AddTraitToHero({
+				TraitName = mod.Data.SavedState.Hex,
+				SkipNewTraitHighlight = true,
+				SkipQuestStatusCheck = true,
+				SkipActivatedTraitUpdate = true,
+			})
+			-- CurrentRun.Hero.SlottedSpell = DeepCopyTable(SpellData[mod.Data.SavedState.Hex])
+			-- CurrentRun.Hero.SlottedSpell.Talents = DeepCopyTable(CreateTalentTree(SpellData[mod.Data.SavedState.Hex]))
 		end
 		for _, traitData in pairs(mod.Data.SavedState.MetaUpgrades) do
 			AddTraitToHero({
 				SkipNewTraitHighlight = true,
+				SkipQuestStatusCheck = true,
+				SkipActivatedTraitUpdate = true,
 				TraitName = traitData.TraitName,
 				Rarity = traitData.Rarity,
 				CustomMultiplier = traitData.CustomMultiplier,

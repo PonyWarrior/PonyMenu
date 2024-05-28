@@ -1,7 +1,3 @@
-local mod = PonyMenu
-
-if not mod.Config.Enabled then return end
-
 --#region BOON SELECTOR
 
 function mod.OpenBoonSelector(screen, button)
@@ -115,7 +111,10 @@ function mod.GiveBoonToPlayer(screen, button)
 				Unit = CurrentRun.Hero,
 				TraitName = boon,
 				Rarity = screen.Rarity
-			})
+			}),
+			SkipNewTraitHighlight = true,
+			SkipQuestStatusCheck = true,
+			SkipActivatedTraitUpdate = true,
 		})
 		screen.BoonsList[screen.CurrentPage][button.Index] = nil
 		local ids = { button.Id }
@@ -850,7 +849,10 @@ function mod.HandleBoonManagerClick(screen, button)
 							TraitName = traitData.Name,
 							Rarity = rarity,
 							StackNum = traitData.StackNum
-						})
+						}),
+						SkipNewTraitHighlight = true,
+						SkipQuestStatusCheck = true,
+						SkipActivatedTraitUpdate = true,
 					})
 				end
 				local ids = {}
@@ -888,7 +890,10 @@ function mod.HandleBoonManagerClick(screen, button)
 							TraitName = traitData.Name,
 							Rarity = rarity,
 							StackNum = traitData.StackNum
-						})
+						}),
+						SkipNewTraitHighlight = true,
+						SkipQuestStatusCheck = true,
+						SkipActivatedTraitUpdate = true,
 					})
 				end
 				local ids = {}
@@ -950,7 +955,10 @@ function mod.HandleBoonManagerClick(screen, button)
 							.Name,
 						Rarity = button.Boon.Rarity,
 						StackNum = count
-					})
+					}),
+					SkipNewTraitHighlight = true,
+					SkipQuestStatusCheck = true,
+					SkipActivatedTraitUpdate = true,
 				})
 			end
 			return
@@ -967,7 +975,10 @@ function mod.HandleBoonManagerClick(screen, button)
 							.Name,
 						Rarity = button.Boon.Rarity,
 						StackNum = count
-					})
+					}),
+					SkipNewTraitHighlight = true,
+					SkipQuestStatusCheck = true,
+					SkipActivatedTraitUpdate = true,
 				})
 			end
 			return
@@ -1632,13 +1643,22 @@ end
 function mod.GiveConsumableToPlayer(screen, button)
 	-- MapState.RoomRequiredObjects = {}
 	if button.Consumable.UseFunctionName and button.Consumable.UseFunctionName == "OpenTalentScreen" then
-		if not CurrentRun.ConsumableRecord["SpellDrop"] then
+		if not CurrentRun.ConsumableRecord["SpellDrop"] and not mod.DoesPlayerHaveHex() then
 			PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo" })
 			return
 		end
 		mod.CloseConsumableSelector(screen)
 	end
 	UseConsumableItem(button.Consumable, {}, CurrentRun.Hero)
+end
+
+function mod.DoesPlayerHaveHex()
+	for i, traitData in pairs (CurrentRun.Hero.Traits) do
+		if traitData.Slot and traitData.Slot == "Spell" then
+			return true
+		end
+	end
+	return false
 end
 
 --#endregion

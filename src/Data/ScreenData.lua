@@ -1,7 +1,3 @@
-local mod = PonyMenu
-
-if not mod.Config.Enabled then return end
-
 function mod.setupScreenData()
 	ModUtil.Table.Merge(ScreenData, {
 		BoonSelector = {
@@ -68,7 +64,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.SpawnBoon,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'SpawnBoon',
 							},
 						},
 						--Rarity buttons
@@ -93,7 +89,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeBoonSelectorRarity,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeBoonSelectorRarity',
 								Rarity = "Common",
 							},
 						},
@@ -118,7 +114,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeBoonSelectorRarity,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeBoonSelectorRarity',
 								Rarity = "Rare",
 							},
 						},
@@ -143,7 +139,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeBoonSelectorRarity,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeBoonSelectorRarity',
 								Rarity = "Epic",
 							},
 						},
@@ -168,7 +164,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeBoonSelectorRarity,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeBoonSelectorRarity',
 								Rarity = "Heroic",
 							},
 						},
@@ -181,7 +177,7 @@ function mod.setupScreenData()
 							OffsetY = 510,
 							Data =
 							{
-								OnPressedFunctionName = mod.CloseBoonSelector,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'CloseBoonSelector',
 								ControlHotkeys = { "Cancel", },
 							},
 						},
@@ -255,7 +251,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = 1
 							},
 						},
@@ -279,7 +275,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = 10
 							},
 						},
@@ -303,7 +299,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = 100
 							},
 						},
@@ -327,7 +323,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = 1000
 							},
 						},
@@ -352,7 +348,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = -1
 							},
 						},
@@ -376,7 +372,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = -10
 							},
 						},
@@ -400,7 +396,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = -100
 							},
 						},
@@ -424,7 +420,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.ChangeTargetResourceAmount,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeTargetResourceAmount',
 								Amount = -1000
 							},
 						},
@@ -449,7 +445,7 @@ function mod.setupScreenData()
 								Justification = "Center"
 							},
 							Data = {
-								OnPressedFunctionName = mod.SpawnResource,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'SpawnResource',
 							},
 						},
 						CloseButton =
@@ -461,7 +457,7 @@ function mod.setupScreenData()
 							OffsetY = 510,
 							Data =
 							{
-								OnPressedFunctionName = mod.CloseBoonSelector,
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'CloseBoonSelector',
 								ControlHotkeys = { "Cancel", },
 							},
 						},
@@ -572,7 +568,7 @@ function mod.setupScreenData()
 							OffsetY = ScreenCenterY - 70,
 							Data =
 							{
-								OnPressedFunctionName = "PonyMenu.CloseBossSelectScreen",
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. "CloseBossSelectScreen",
 								ControlHotkeys = { "Cancel", },
 							},
 						},
@@ -637,7 +633,7 @@ function mod.setupScreenData()
 							OffsetY = ScreenCenterY - 70,
 							Data =
 							{
-								OnPressedFunctionName = "PonyMenu.CloseConsumableSelector",
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'CloseConsumableSelector',
 								ControlHotkeys = { "Cancel", },
 							},
 						},
@@ -794,7 +790,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.ClearAllBoons,
 			Description = mod.Locale.ClearAllBoonsDescription,
 			Type = "Command",
-			Function = "PonyMenu.ClearAllBoons"
+			Function = _PLUGIN.guid .. '.' .. "ClearAllBoons"
 		},
 		{
 			Icon = "CharonPointsDrop",
@@ -802,7 +798,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.BoonManagerTitle,
 			Description = mod.Locale.BoonManagerDescription,
 			Type = "Command",
-			Function = "PonyMenu.OpenBoonManager"
+			Function = _PLUGIN.guid .. '.' .. "OpenBoonManager"
 		},
 		{
 			IconPath = "GUI\\Screens\\Inventory\\Icon-Resources",
@@ -810,7 +806,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.ResourceMenuTitle,
 			Description = mod.Locale.ResourceMenuDescription,
 			Type = "Command",
-			Function = "PonyMenu.OpenResourceMenu"
+			Function = _PLUGIN.guid .. '.' .. "OpenResourceMenu"
 		},
 		{
 			IconPath = "Items\\Loot\\MaxHealthDrop_Preview",
@@ -818,7 +814,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.ConsumableSelectorTitle,
 			Description = mod.Locale.ConsumableSelectorDescription,
 			Type = "Command",
-			Function = "PonyMenu.OpenConsumableSelector"
+			Function = _PLUGIN.guid .. '.' .. "OpenConsumableSelector"
 		},
 		{
 			IconPath = "GUI\\Icons\\Boss",
@@ -826,7 +822,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.BossSelectorTitle,
 			Description = mod.Locale.BossSelectorDescription,
 			Type = "Command",
-			Function = "PonyMenu.OpenBossSelector"
+			Function = _PLUGIN.guid .. '.' .. "OpenBossSelector"
 		},
 		{
 			IconPath = "GUI\\Icons\\NoCanDo",
@@ -834,7 +830,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.KillPlayerTitle,
 			Description = mod.Locale.KillPlayerDescription,
 			Type = "Command",
-			Function = "PonyMenu.KillPlayer"
+			Function = _PLUGIN.guid .. '.' .. 'KillPlayer'
 		},
 		{
 			IconPath = "GUI\\Shell\\CloudSyncConflict",
@@ -842,7 +838,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.SaveStateTitle,
 			Description = mod.Locale.SaveStateDescription,
 			Type = "Command",
-			Function = "PonyMenu.SaveState"
+			Function = _PLUGIN.guid .. '.' .. 'SaveState'
 		},
 		{
 			IconPath = "GUI\\Shell\\CloudSuccess",
@@ -850,7 +846,7 @@ function mod.setupCommandData()
 			Name = mod.Locale.LoadStateTitle,
 			Description = mod.Locale.LoadStateDescription,
 			Type = "Command",
-			Function = "PonyMenu.LoadState"
+			Function = _PLUGIN.guid .. '.' .. 'LoadState'
 		},
 	}
 end

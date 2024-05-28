@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Ported to Hell2Modding format
+
+### Fixed
+
+- Fixed various issues with LoadState
+
 ## [0.9.0] - 2024-05-20
 
 ### Fixed
@@ -19,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Load State
 - Boss Selector
 - Consumable Selector (WIP)
+- Kill Player
 
 ## [0.8.0] - 2024-05-18
 
