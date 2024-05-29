@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.1] - 2024-05-29
+
 ### Fixed
 
 - Fixed boss selector crash
@@ -72,7 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.0...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.1...HEAD
+[0.10.1]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.7.5...0.8.0
