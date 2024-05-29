@@ -11,6 +11,16 @@ mod = modutil.mod.Mod.Register(_PLUGIN.guid)
 
 mod.Locales = mod.Locales or {}
 
+data = {}
+
+ModUtil.LoadOnce(function()
+	if not rom.game.GameState.PonyMenu then
+		rom.game.GameState.PonyMenu = { Data = {} }
+	end
+	data = rom.game.GameState.PonyMenu.Data
+end)
+
+
 function mod.GetLanguageString(path)
 	local locale = mod.Locales[GetLanguage()] or mod.Locales.en
 	return ModUtil.Path.Get(path, locale) or ModUtil.Path.Get(path, mod.Locales.en)
@@ -649,7 +659,7 @@ function mod.SaveState()
 		local wp = GetEquippedWeapon()
 		local aspect = GameState.LastWeaponUpgradeName[wp]
 		local aspectLevel = GetWeaponUpgradeLevel(aspect)
-		mod.Data.SavedState = {
+		data.SavedState = {
 			Traits = {},
 			MetaUpgrades = {},
 			Weapon = wp,
@@ -662,19 +672,19 @@ function mod.SaveState()
 		for i, traitData in pairs(CurrentRun.Hero.Traits) do
 			if
 				not traitData.MetaUpgrade
-				and traitData.Name ~= mod.Data.SavedState.Weapon
-				and traitData.Name ~= mod.Data.SavedState.Aspect.Name
-				and traitData.Name ~= mod.Data.SavedState.Keepsake
-				and traitData.Name ~= mod.Data.SavedState.Assist
-				and traitData.Name ~= mod.Data.SavedState.Familiar
+				and traitData.Name ~= data.SavedState.Weapon
+				and traitData.Name ~= data.SavedState.Aspect.Name
+				and traitData.Name ~= data.SavedState.Keepsake
+				and traitData.Name ~= data.SavedState.Assist
+				and traitData.Name ~= data.SavedState.Familiar
 			then
 				if traitData.Slot and traitData.Slot == "Spell" then
-					mod.Data.SavedState.Hex = traitData.Name
+					data.SavedState.Hex = traitData.Name
 				else
-					table.insert(mod.Data.SavedState.Traits, { Name = traitData.Name, Rarity = traitData.Rarity, StackNum = traitData.StackNum })
+					table.insert(data.SavedState.Traits, { Name = traitData.Name, Rarity = traitData.Rarity, StackNum = traitData.StackNum })
 				end
 			elseif traitData.MetaUpgrade then
-				table.insert(mod.Data.SavedState.MetaUpgrades, {
+				table.insert(data.SavedState.MetaUpgrades, {
 					TraitName = traitData.Name,
 					Rarity = traitData.Rarity,
 					CustomMultiplier = traitData.CustomMultiplier,
@@ -697,7 +707,7 @@ function mod.SaveState()
 end
 
 function mod.LoadState(newRun)
-	if mod.Data.SavedState ~= nil then
+	if data.SavedState ~= nil then
 		if newRun == nil then
 			mod.RemoveAllTraits()
 			ClearUpgrades()
@@ -706,26 +716,26 @@ function mod.LoadState(newRun)
 			RemoveLastStand(CurrentRun.Hero, "ReincarnationKeepsake")
 			CurrentRun.Hero.MaxLastStands = CurrentRun.Hero.MaxLastStands - 1
 		end
-		EquipPlayerWeapon(WeaponData[mod.Data.SavedState.Weapon], { LoadPackages = true })
-		if mod.Data.SavedState.Keepsake ~= nil then
-			EquipKeepsake(CurrentRun.Hero, mod.Data.SavedState.Keepsake, { FromLoot = true, SkipNewTraitHighlight = true })
+		EquipPlayerWeapon(WeaponData[data.SavedState.Weapon], { LoadPackages = true })
+		if data.SavedState.Keepsake ~= nil then
+			EquipKeepsake(CurrentRun.Hero, data.SavedState.Keepsake, { FromLoot = true, SkipNewTraitHighlight = true })
 		end
-		if mod.Data.SavedState.Assist ~= nil then
-			EquipAssist(CurrentRun.Hero, mod.Data.SavedState.Assist, { SkipNewTraitHighlight = true })
+		if data.SavedState.Assist ~= nil then
+			EquipAssist(CurrentRun.Hero, data.SavedState.Assist, { SkipNewTraitHighlight = true })
 		end
-		if mod.Data.SavedState.Familiar ~= nil then
-			EquipFamiliar(nil, { Unit = CurrentRun.Hero, FamiliarName = mod.Data.SavedState.Familiar, SkipNewTraitHighlight = true })
+		if data.SavedState.Familiar ~= nil then
+			EquipFamiliar(nil, { Unit = CurrentRun.Hero, FamiliarName = data.SavedState.Familiar, SkipNewTraitHighlight = true })
 		end
-		if mod.Data.SavedState.Aspect.Name ~= nil then
+		if data.SavedState.Aspect.Name ~= nil then
 			AddTraitToHero({
-				TraitName = mod.Data.SavedState.Aspect.Name,
-				Rarity = mod.Data.SavedState.Aspect.Rarity,
+				TraitName = data.SavedState.Aspect.Name,
+				Rarity = data.SavedState.Aspect.Rarity,
 				SkipNewTraitHighlight = true,
 				SkipQuestStatusCheck = true,
 				SkipActivatedTraitUpdate = true,
 			})
 		end
-		for _, traitData in pairs(mod.Data.SavedState.Traits) do
+		for _, traitData in pairs(data.SavedState.Traits) do
 			AddTraitToHero({
 				TraitData = GetProcessedTraitData({
 					Unit = CurrentRun.Hero,
@@ -738,17 +748,17 @@ function mod.LoadState(newRun)
 				SkipActivatedTraitUpdate = true,
 			})
 		end
-		if mod.Data.SavedState.Hex ~= nil then
+		if data.SavedState.Hex ~= nil then
 			AddTraitToHero({
-				TraitName = mod.Data.SavedState.Hex,
+				TraitName = data.SavedState.Hex,
 				SkipNewTraitHighlight = true,
 				SkipQuestStatusCheck = true,
 				SkipActivatedTraitUpdate = true,
 			})
-			-- CurrentRun.Hero.SlottedSpell = DeepCopyTable(SpellData[mod.Data.SavedState.Hex])
-			-- CurrentRun.Hero.SlottedSpell.Talents = DeepCopyTable(CreateTalentTree(SpellData[mod.Data.SavedState.Hex]))
+			-- CurrentRun.Hero.SlottedSpell = DeepCopyTable(SpellData[data.SavedState.Hex])
+			-- CurrentRun.Hero.SlottedSpell.Talents = DeepCopyTable(CreateTalentTree(SpellData[data.SavedState.Hex]))
 		end
-		for _, traitData in pairs(mod.Data.SavedState.MetaUpgrades) do
+		for _, traitData in pairs(data.SavedState.MetaUpgrades) do
 			AddTraitToHero({
 				SkipNewTraitHighlight = true,
 				SkipQuestStatusCheck = true,

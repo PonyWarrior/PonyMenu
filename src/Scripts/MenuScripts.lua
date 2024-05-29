@@ -1362,7 +1362,6 @@ function mod.OpenBossSelector()
 	end
 
 	local screen = DeepCopyTable(ScreenData.BossSelector)
-	screen.SelectedGod = mod.Data.SelectedGod or "No God selected"
 	local components = screen.Components
 	local children = screen.ComponentData.Background.Children
 	HideCombatUI(screen.Name)
@@ -1374,7 +1373,7 @@ function mod.OpenBossSelector()
 
 	--Display
 
-	if mod.Data.SavedState then
+	if data.SavedState then
 		local index = 0
 		local rowOffset = 400
 		local columnOffset = 400
@@ -1462,7 +1461,7 @@ function mod.OpenBossSelector()
 end
 
 function mod.HandleBossSelection(screen, button)
-	if mod.Data.SavedState == nil then
+	if data.SavedState == nil then
 		return
 	end
 	local boss = button.Boss
