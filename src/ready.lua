@@ -520,13 +520,13 @@ function mod.IsBoonTrait(traitName)
 	end
 end
 
-function mod.CreateNewCustomRun(room)
+function CreateNewCustomRun(room)
 	local prevRun = CurrentRun
 	local args = args or {}
 	SetupRunData()
 	ResetUI()
 
-	CurrentRun = {}
+	rom.game.CurrentRun = {}
 	RunStateInit()
 
 	if args.RunOverrides ~= nil then
@@ -599,7 +599,7 @@ function mod.CreateNewCustomRun(room)
 	return CurrentRun
 end
 
-function mod.StartNewCustomRun(room)
+function StartNewCustomRun(room)
 	AddInputBlock({ Name = "StartOver" })
 
 	for index, familiarName in ipairs(FamiliarOrderData) do
@@ -615,7 +615,7 @@ function mod.StartNewCustomRun(room)
 	EndRun(currentRun)
 	CurrentHubRoom = nil
 	PreviousDeathAreaRoom = nil
-	currentRun = mod.CreateNewCustomRun(room)
+	currentRun = CreateNewCustomRun(room)
 	StopSound({ Id = AudioState.AmbientMusicId, Duration = 1.0 })
 	AudioState.AmbientMusicId = nil
 	AudioState.AmbientTrackName = nil

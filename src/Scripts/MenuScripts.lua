@@ -1480,7 +1480,7 @@ function mod.HandleBossSelection(screen, button)
 	boss.Room.TimeChallengeSwitchSpawnChance = 0.0
 	boss.Room.WellShopSpawnChance = 0.0
 	boss.Room.SecretSpawnChance = 0.0
-	mod.StartNewCustomRun(boss.Room)
+	StartNewCustomRun(boss.Room)
 end
 
 function mod.CloseBossSelectScreen(screen)
