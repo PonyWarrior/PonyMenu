@@ -5,7 +5,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "PonyWarrior"
 name = "PonyMenu"
-versionNumber = "0.10.1"
+versionNumber = "0.10.2"
 description = "Successor to Codex Menu. Lets you use different commands to test or cheat."
 websiteUrl = "https://github.com/PonyWarrior/PonyMenu"
 containsNsfwContent = false
