@@ -49,6 +49,7 @@ local function on_ready()
 	import 'Text/fr.lua'
 	import 'Text/zhCN.lua'
 	import 'Text/zhTW.lua'
+	import 'Text/ptBR.lua'
 	import 'Data/ResourceData.lua'
 	import 'Data/ScreenData.lua'
 	import 'Scripts/MenuScripts.lua'
