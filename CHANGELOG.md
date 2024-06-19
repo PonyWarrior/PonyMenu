@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed for modutil 4.0
+
+### Added
+
+- Added pt-br translation by Seceip
+
 ## [0.10.2] - 2024-05-29
 
 ### Fixed
