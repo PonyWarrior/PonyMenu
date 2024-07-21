@@ -644,6 +644,9 @@ function mod.setupScreenData()
 	})
 end
 
+local mods = rom.mods
+local practicalGods = mods["zannc-Practical_Gods"]
+
 function mod.setupCommandData()
 	mod.CommandData = {
 		{
@@ -693,7 +696,7 @@ function mod.setupCommandData()
 			IconScale = 0.6,
 			Name = "ArtemisUpgrade",
 			Type = "Boon",
-			NoSpawn = true
+            NoSpawn = true
 		},
 		{
 			Icon = "BoonSymbolHermesIcon",
@@ -849,6 +852,14 @@ function mod.setupCommandData()
 			Function = _PLUGIN.guid .. '.' .. 'LoadState'
 		},
 	}
+end
+
+if practicalGods then
+    for _, v in ipairs(mod.CommandData) do
+        if v.Icon == "BoonSymbolArtemisIcon" then
+			v.NoSpawn = false
+        end
+    end
 end
 
 mod.Internal = ModUtil.UpValues(function()
