@@ -852,14 +852,14 @@ function mod.setupCommandData()
 			Function = _PLUGIN.guid .. '.' .. 'LoadState'
 		},
 	}
-end
 
-if practicalGods then
-    for _, v in ipairs(mod.CommandData) do
-        if v.Icon == "BoonSymbolArtemisIcon" then
-			v.NoSpawn = false
-        end
-    end
+	if practicalGods then
+		for _, v in ipairs(mod.CommandData) do
+			if v.Icon == "BoonSymbolArtemisIcon" then
+				v.NoSpawn = false
+			end
+		end
+	end
 end
 
 mod.Internal = ModUtil.UpValues(function()
