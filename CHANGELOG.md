@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.5] - 2024-10-17
+
 ### Changed
 
 - Added Athena
@@ -103,7 +105,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.4...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.5...HEAD
+[0.10.5]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.4...0.10.5
 [0.10.4]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.3...0.10.4
 [0.10.3]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.2...0.10.3
 [0.10.2]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.1...0.10.2
