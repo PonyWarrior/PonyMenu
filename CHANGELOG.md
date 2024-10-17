@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added Athena
+- Added Dionysus
+- Added Prometheus to Boss Selector
+- Starting a boss fight with Boss Selector no longer saves your game
+
 ## [0.10.4] - 2024-07-21
 
 ### Changed
