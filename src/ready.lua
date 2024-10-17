@@ -20,7 +20,6 @@ ModUtil.LoadOnce(function()
 	data = rom.game.GameState.PonyMenu.Data
 end)
 
-
 function mod.GetLanguageString(path)
 	local locale = mod.Locales[GetLanguage()] or mod.Locales.en
 	return ModUtil.Path.Get(path, locale) or ModUtil.Path.Get(path, mod.Locales.en)
@@ -59,6 +58,8 @@ local function setupMainData()
 		NPC_Medea_01 = {},
 		NPC_Icarus_01 = {},
 		NPC_Circe_01 = {},
+		NPC_Athena_01 = {},
+		NPC_Dionysus_01 = {}
 	}
 
 	mod.ConsumableData = {
@@ -201,8 +202,7 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 					Sound = "/SFX/Menu Sounds/GodBoonMenuClose",
 					Group = "Combat_Menu_Overlay",
 					X = resourceLocation.X,
-					Y =
-						resourceLocation.Y
+					Y = resourceLocation.Y
 				})
 				AttachLua({ Id = button.Id, Table = button })
 				button.Screen = screen
@@ -269,12 +269,10 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 			local button = CreateScreenComponent({
 				Name = "ButtonInventoryItem",
 				Scale = itemData.IconScale or 1.0,
-				Sound =
-				"/SFX/Menu Sounds/GodBoonMenuClose",
+				Sound = "/SFX/Menu Sounds/GodBoonMenuClose",
 				Group = "Combat_Menu_Overlay",
 				X = resourceLocation.X,
-				Y =
-					resourceLocation.Y
+				Y = resourceLocation.Y + 10
 			})
 			AttachLua({ Id = button.Id, Table = button })
 			button.Screen = screen
@@ -442,6 +440,16 @@ function mod.PopulateBoonData(upgradeName)
 				index = index + 1
 				mod.BoonData[upgradeName][index] = v
 			end
+		elseif upgradeName == "NPC_Athena_01" then
+			for k, v in pairs(UnitSetData.NPC_Athena.NPC_Athena_01.Traits) do
+				index = index + 1
+				mod.BoonData[upgradeName][index] = v
+			end
+		elseif upgradeName == "NPC_Dionysus_01" then
+			for k, v in pairs(UnitSetData.NPC_Dionysus.NPC_Dionysus_01.Traits) do
+				index = index + 1
+				mod.BoonData[upgradeName][index] = v
+			end
 		end
 	end
 end
@@ -474,6 +482,10 @@ function mod.GetLootColor(upgradeName)
 		color = Color.IcarusVoice
 	elseif upgradeName == "NPC_Circe_01" then
 		color = Color.CirceVoice
+	elseif upgradeName == "NPC_Athena_01" then
+		color = Color.AthenaVoice
+	elseif upgradeName == "NPC_Dionysus_01" then
+		color = Color.DionysusVoice
 	end
 	return color
 end
@@ -610,6 +622,7 @@ function CreateNewCustomRun(room)
 end
 
 function StartNewCustomRun(room)
+	--TODO hook player death by boss
 	AddInputBlock({ Name = "StartOver" })
 
 	for index, familiarName in ipairs(FamiliarOrderData) do
@@ -636,7 +649,7 @@ function StartNewCustomRun(room)
 
 	AddTimerBlock(currentRun, "StartOver")
 
-	RequestSave({ StartNextMap = currentRun.CurrentRoom.Name, SaveName = "_Temp", DevSaveName = CreateDevSaveName(currentRun) })
+	-- RequestSave({ StartNextMap = currentRun.CurrentRoom.Name, SaveName = "_Temp", DevSaveName = CreateDevSaveName(currentRun) })
 	ValidateCheckpoint({ Value = true })
 
 	RemoveInputBlock({ Name = "StartOver" })

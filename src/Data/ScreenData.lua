@@ -480,6 +480,7 @@ function mod.setupScreenData()
 				"I_Boss01",
 				"N_Boss01",
 				"O_Boss01",
+				"P_Boss01"
 			},
 			BossData = {
 				F_Boss01 = {
@@ -506,6 +507,10 @@ function mod.setupScreenData()
 					Name = "Eris_Full",
 					Portrait = "Codex_Portrait_Eris",
 				},
+				P_Boss01 = {
+					Name = "Prometheus_Full",
+					Portrait = "Codex_Portrait_Prometheus",
+				}
 			},
 			TitleText =
 			{
@@ -696,7 +701,7 @@ function mod.setupCommandData()
 			IconScale = 0.6,
 			Name = "ArtemisUpgrade",
 			Type = "Boon",
-            NoSpawn = true
+			NoSpawn = true
 		},
 		{
 			Icon = "BoonSymbolHermesIcon",
@@ -756,7 +761,7 @@ function mod.setupCommandData()
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\Hades_Symbol_01",
+			IconPath = "GUI\\Icons\\LoadingSymbol_01",
 			IconScale = 0.4,
 			Name = "NPC_LordHades_01",
 			Type = "Boon",
@@ -764,16 +769,16 @@ function mod.setupCommandData()
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\ManaLock",
-			IconScale = 1.5,
+			IconPath = "GUI\\Icons\\Mana",
+			IconScale = 1.0,
 			Name = "NPC_Medea_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\Favor",
-			IconScale = 1.0,
+			IconPath = "GUI\\Icons\\Attributes\\Timeless",
+			IconScale = 0.7,
 			Name = "NPC_Icarus_01",
 			Type = "Boon",
 			NoRarity = true,
@@ -781,10 +786,24 @@ function mod.setupCommandData()
 		},
 		{
 			IconPath = "GUI\\Icons\\ManaCrystal",
-			IconScale = 1.5,
+			IconScale = 1.0,
 			Name = "NPC_Circe_01",
 			Type = "Boon",
 			NoRarity = true,
+			NoSpawn = true
+		},
+		{
+			Icon = "BoonSymbolAthenaIcon",
+			IconScale = 0.6,
+			Name = "NPC_Athena_01",
+			Type = "Boon",
+			NoSpawn = true
+		},
+		{
+			Icon = "BoonSymbolDionysusIcon",
+			IconScale = 0.6,
+			Name = "NPC_Dionysus_01",
+			Type = "Boon",
 			NoSpawn = true
 		},
 		{
@@ -812,24 +831,24 @@ function mod.setupCommandData()
 			Function = _PLUGIN.guid .. '.' .. "OpenResourceMenu"
 		},
 		{
-			IconPath = "Items\\Loot\\MaxHealthDrop_Preview",
-			IconScale = 0.3,
+			IconPath = "Items\\Resources\\Common\\MoneyDrop_Text",
+			IconScale = 1.0,
 			Name = mod.Locale.ConsumableSelectorTitle,
 			Description = mod.Locale.ConsumableSelectorDescription,
 			Type = "Command",
 			Function = _PLUGIN.guid .. '.' .. "OpenConsumableSelector"
 		},
 		{
-			IconPath = "GUI\\Icons\\Boss",
-			IconScale = 0.6,
+			IconPath = "GUI\\Icons\\LobAmmo",
+			IconScale = 1.0,
 			Name = mod.Locale.BossSelectorTitle,
 			Description = mod.Locale.BossSelectorDescription,
 			Type = "Command",
 			Function = _PLUGIN.guid .. '.' .. "OpenBossSelector"
 		},
 		{
-			IconPath = "GUI\\Icons\\NoCanDo",
-			IconScale = 0.6,
+			IconPath = "GUI\\Graybox\\Button_Close",
+			IconScale = 0.8,
 			Name = mod.Locale.KillPlayerTitle,
 			Description = mod.Locale.KillPlayerDescription,
 			Type = "Command",
