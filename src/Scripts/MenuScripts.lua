@@ -449,9 +449,9 @@ end
 
 function mod.ChangeTargetResourceAmount(screen, button)
 	local amount = screen.Amount + button.Amount
-	if amount < 0 then
-		amount = 0
-	end
+	-- if amount < 0 then
+	-- 	amount = 0
+	-- end
 	screen.Amount = amount
 	ModifyTextBox({ Id = screen.Components.ResourceAmountTextbox.Id, Text = screen.Amount })
 end
@@ -461,7 +461,15 @@ function mod.SpawnResource(screen, button)
 		return
 	end
 
-	AddResource(screen.Resource, screen.Amount)
+	if screen.Amount < 0 then
+		local amount = screen.Amount * -1
+		if amount > GameState.Resources[screen.Resource] then
+			amount = GameState.Resources[screen.Resource]
+		end
+		SpendResource(screen.Resource, amount)
+	else
+		AddResource(screen.Resource, screen.Amount)
+	end
 end
 
 function mod.ResourceMenuLoadPage(screen)
