@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.7] - 2024-10-18
+
 ### Changed
 
 - You can now remove resources with the Resource Menu
@@ -115,7 +117,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.6...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.7...HEAD
+[0.10.7]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.6...0.10.7
 [0.10.6]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.5...0.10.6
 [0.10.5]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.4...0.10.5
 [0.10.4]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.3...0.10.4
