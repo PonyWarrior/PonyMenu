@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- You can now remove resources with the Resource Menu
+
 ## [0.10.6] - 2024-10-17
 
 ### Fixed
