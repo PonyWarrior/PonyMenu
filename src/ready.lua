@@ -41,6 +41,7 @@ local function setupMainData()
 		ZeusUpgrade = {},
 		PoseidonUpgrade = {},
 		AphroditeUpgrade = {},
+		AresUpgrade = {},
 		ApolloUpgrade = {},
 		DemeterUpgrade = {},
 		HephaestusUpgrade = {},
@@ -95,7 +96,7 @@ end
 ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categoryIndex, args)
 	args = args or {}
 	local components = screen.Components
-
+	
 	-- Cleanup prev category
 	local prevCategory = screen.ItemCategories[screen.ActiveCategoryIndex]
 	--Mod start
@@ -104,11 +105,20 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 	end
 	-- Mod end
 	if prevCategory.CloseFunctionName ~= nil then
-		CallFunctionName(prevCategory.CloseFunctionName, screen)
+		CallFunctionName( prevCategory.CloseFunctionName, screen )
 	else
-		for i, resourceName in ipairs(prevCategory) do
-			if components[resourceName] ~= nil then
-				Destroy({ Id = components[resourceName].Id })
+		for i, resourceName in ipairs( prevCategory ) do
+			local resourceComponent = components[resourceName]
+			if resourceComponent ~= nil then
+				if resourceComponent.NewIcon ~= nil then
+					Destroy({ Id = resourceComponent.NewIcon.Id })
+				end
+				-- Mod start
+				if resourceComponent.Highlight ~= nil then
+					Destroy({ Id = resourceComponent.Highlight.Id })
+				end
+				-- Mod end
+				Destroy({ Id = resourceComponent.Id })
 			end
 		end
 	end
@@ -117,12 +127,8 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 	ModifyTextBox({ Id = components.InfoBoxDescription.Id, FadeTarget = 0.0, })
 	ModifyTextBox({ Id = components.InfoBoxDetails.Id, FadeTarget = 0.0, })
 	ModifyTextBox({ Id = components.InfoBoxFlavor.Id, FadeTarget = 0.0, })
-	if screen.Components["Category" .. prevCategory.Name] ~= nil then
-		StopAnimation({
-			DestinationId = screen.Components["Category" .. prevCategory.Name].Id,
-			Name =
-			"InventoryTabHighlightActiveCategory"
-		})
+	if screen.Components["Category"..prevCategory.Name] ~= nil then
+		StopAnimation({ DestinationId = screen.Components["Category"..prevCategory.Name].Id, Name = "InventoryTabHighlightActiveCategory" })
 	end
 
 	local category = screen.ItemCategories[categoryIndex]
@@ -132,12 +138,14 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 	local slotName = category.Name
 
 	-- Highlight new category
-	CreateAnimation({
-		DestinationId = screen.Components["Category" .. slotName].Id,
-		Name =
-		"InventoryTabHighlightActiveCategory",
-		Group = "Combat_Menu_TraitTray"
-	})
+	CreateAnimation({ DestinationId = screen.Components["Category"..slotName].Id, Name = "InventoryTabHighlightActiveCategory", Group = "Combat_Menu_TraitTray" })
+	ModifyTextBox({ Id = screen.Components.CategoryTitleText.Id, Text = category.Name })
+
+	local newButtonKey = "NewIcon"..slotName
+	if components[newButtonKey] ~= nil then
+		Destroy({ Id = components[newButtonKey].Id })
+	end
+
 	--Mod Start
 	if category.Name == "PONYMENU" or category.Name == "Pony Menu" then
 		ModifyTextBox({ Id = screen.Components.CategoryTitleText.Id, Text = mod.Locale.PonyMenuCategoryTitle })
@@ -148,30 +156,42 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 
 	screen.ActiveCategoryIndex = categoryIndex
 
-	SetAnimation({
-		DestinationId = components.Background.Id,
-		Name = category.Background or
-			screen.ComponentData.Background.AnimationName
-	})
+	screen.CloseAnimation = category.CloseAnimation
+	if args.FirstOpen then
+		SetAnimation({ DestinationId = components.Background.Id, Name = category.OpenAnimation })
+	else
+		local fromMap = screen.TransitionAnimationMap[prevCategory.CloseAnimation]
+		-- Mod start
+		local transitionAnimationName
+		if fromMap ~= nil then
+			transitionAnimationName = fromMap[category.CloseAnimation]
+		end
+		-- Mod end
+		if transitionAnimationName ~= nil then
+			SetAnimation({ DestinationId = components.Background.Id, Name = transitionAnimationName })
+		end
+	end
 
 	if category.GamepadNavigation ~= nil then
-		SetGamepadNavigation(category)
+		SetGamepadNavigation( category )
 	else
-		SetGamepadNavigation(screen)
+		SetGamepadNavigation( screen )
 	end
 
 	if category.OpenFunctionName ~= nil then
-		CallFunctionName(category.OpenFunctionName, screen)
+		CallFunctionName( category.OpenFunctionName, screen )
 		return
 	end
-
+	
 	local resourceLocation = { X = screen.GridStartX, Y = screen.GridStartY }
 	local columnNum = 1
 	-- Mod start
 	if category.Name ~= "PONYMENU" and category.Name ~= "Pony Menu" then
-		for i, resourceName in ipairs(category) do
+		for i, resourceName in ipairs( category ) do
+
 			local resourceData = ResourceData[resourceName]
-			if (GameState.LifetimeResourcesGained[resourceName] or 0) > 0 or (resourceData.RevealGameStateRequirements ~= nil and IsGameStateEligible(CurrentRun, resourceData, resourceData.RevealGameStateRequirements)) then
+			if CanShowResourceInInventory( resourceData ) then
+
 				local textLines = nil
 				local canBeGifted = false
 				local canBePlanted = false
@@ -185,68 +205,113 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 					else
 						local spending = {}
 						spending[resourceName] = 1
-						textLines = GetRandomEligibleTextLines(screen.Args.GiftTarget,
-							screen.Args.GiftTarget.GiftTextLineSets,
-							GetNarrativeDataValue(screen.Args.GiftTarget, "GiftTextLinePriorities"),
-							{ Spending = spending })
+						textLines = GetRandomEligibleTextLines( screen.Args.GiftTarget, screen.Args.GiftTarget.GiftTextLineSets, GetNarrativeDataValue( screen.Args.GiftTarget, "GiftTextLinePriorities" ), { Spending = spending } )
 						if textLines ~= nil then
 							canBeGifted = true
 						end
 					end
 				end
 
-				local button = CreateScreenComponent({
-					Name = "ButtonInventoryItem",
-					Scale = resourceData.IconScale or
-						1.0,
-					Sound = "/SFX/Menu Sounds/GodBoonMenuClose",
+				local button = CreateScreenComponent({ Name = "ButtonInventoryItem",
+					Scale = resourceData.IconScale or 1.0,
+					Sound = "/SFX/Menu Sounds/IrisMenuBack",
 					Group = "Combat_Menu_Overlay",
 					X = resourceLocation.X,
-					Y = resourceLocation.Y
+					Y = resourceLocation.Y,
 				})
+				if args.FirstOpen then
+					SetAlpha({ Id = button.Id, Fraction = 0.0 })
+					SetAlpha({ Id = button.Id, Fraction = 1.0, Duration = 0.6 })
+				end
 				AttachLua({ Id = button.Id, Table = button })
 				button.Screen = screen
 				button.ResourceData = resourceData
 				components[resourceName] = button
 				SetAnimation({ DestinationId = button.Id, Name = resourceData.IconPath or resourceData.Icon })
 
+				local buttonHighlight = CreateScreenComponent({ Name = "BlankObstacle",
+					Group = "Combat_Menu_Overlay_Additive",
+					X = resourceLocation.X,
+					Y = resourceLocation.Y,
+				})
+				if args.FirstOpen then
+					SetAlpha({ Id = buttonHighlight.Id, Fraction = 0.0 })
+					SetAlpha({ Id = buttonHighlight.Id, Fraction = 1.0, Duration = 0.6 })
+				end
+				components[resourceName.."Highlight"] = buttonHighlight
+				button.Highlight = buttonHighlight
+			
 				if canBePlanted then
-					if HasResource(resourceName, 1) then
+					if HasResource( resourceName, 1 ) then
 						button.ContextualAction = "Menu_Plant"
 						button.OnPressedFunctionName = "GardenPlantSeed"
+						if #GardenData.Seeds[resourceName].RandomOutcomes == 1 then
+							local growsIntoName = GetFirstKey( GardenData.Seeds[resourceName].RandomOutcomes[1].AddResources )
+							local amountNeededByPins = GetResourceAmountNeededByPins( growsIntoName )
+							if amountNeededByPins > 0 then
+								local pinAnimation = "StoreItemPin"
+								if HasResource( growsIntoName, amountNeededByPins ) then
+									pinAnimation = "StoreItemPin_Complete"
+								end
+								button.PinIcon = CreateScreenComponent({
+									Name = "BlankObstacle",
+									Group = "Combat_Menu_Overlay",
+									Scale = screen.SeedPinIconScale,
+									X = resourceLocation.X + screen.SeedPinIconOffsetX,
+									Y = resourceLocation.Y + screen.SeedPinIconOffsetY,
+									Animation = pinAnimation,
+								})
+								components[resourceName.."PinIcon"] = button.PinIcon
+							end
+						end
 					else
 						SetColor({ Id = button.Id, Color = Color.Black })
-						button.Description = "InventoryScreen_SeedNotAvailable"
+						button.MouseOverText = "InventoryScreen_SeedNotAvailable"
 					end
 				elseif canBeGifted then
-					if HasResource(resourceName, 1) then
+					if HasResource( resourceName, 1 ) then
 						button.ContextualAction = "Menu_Gift"
 						button.OnPressedFunctionName = "GiveSelectedGift"
 						button.TextLines = textLines
 					else
 						SetColor({ Id = button.Id, Color = Color.Black })
-						button.Description = "InventoryScreen_GiftNotAvailable"
-					end
+						button.MouseOverText = "InventoryScreen_GiftNotAvailable"
+					end				
 				elseif screen.Args.PlantTarget ~= nil then
 					SetColor({ Id = button.Id, Color = Color.Black })
-					button.Description = "InventoryScreen_SeedNotWanted"
+					button.MouseOverText = "InventoryScreen_SeedNotWanted"
 				elseif screen.Args.GiftTarget ~= nil then
 					SetColor({ Id = button.Id, Color = Color.Black })
-					button.Description = "InventoryScreen_GiftNotWanted"
+					button.MouseOverText = "InventoryScreen_GiftNotWanted"
 				end
 
-				CreateTextBoxWithScreenFormat(screen, button, "ResourceCountFormat",
-					{ Text = GameState.Resources[resourceName] or 0 })
+				CreateTextBoxWithScreenFormat( screen, button, "ResourceCountFormat", { Text = GameState.Resources[resourceName] or 0 } )
 
 				button.MouseOverSound = "/SFX/Menu Sounds/DialoguePanelOutMenu"
 				button.OnMouseOverFunctionName = "MouseOverResourceItem"
 				button.OnMouseOffFunctionName = "MouseOffResourceItem"
 
-				if (resourceName == args.InitialSelection) or (args.InitialSelection == nil and resourceName == GameState.UnviewedLastResourceGained) then
-					UnviewedLastResourceGainedPresentation(screen, button)
-					GameState.UnviewedLastResourceGained = nil
-					TeleportCursor({ OffsetX = resourceLocation.X, OffsetY = resourceLocation.Y, ForceUseCheck = true })
-					screen.CursorSet = true
+				button.Viewable = not screen.Args.CategoryLocked or button.OnPressedFunctionName ~= nil
+				if button.Viewable then
+					-- highlight the last resource you collected
+					if resourceName == (args.InitialSelection or GameState.UnviewedLastResourceGained) then
+						UnviewedLastResourceGainedPresentation( screen, button )
+						GameState.UnviewedLastResourceGained = nil
+						TeleportCursor({ OffsetX = resourceLocation.X, OffsetY = resourceLocation.Y, ForceUseCheck = true })
+						screen.CursorSet = true
+					end
+
+					-- mark unviewed resources as "new"
+					if not GameState.ResourcesViewed[resourceName] then
+						local newIcon = CreateScreenComponent({ Name = "BlankObstacle", Animation = "MusicPlayerNewTrack", Group = screen.ComponentData.DefaultGroup, Scale = screen.NewItemStarScale, })
+						if args.FirstOpen then
+							SetAlpha({ Id = newIcon.Id, Fraction = 0.0 })
+							SetAlpha({ Id = newIcon.Id, Fraction = 1.0, Duration = 0.6 })
+						end
+						Attach({ Id = newIcon.Id, DestinationId = button.Id, OffsetX = screen.NewItemStarOffsetX, OffsetY = screen.NewItemStarOffsetY })
+						button.NewIcon = newIcon
+						components["NewIcon"..resourceName] = newIcon
+					end
 				end
 
 				if columnNum < screen.GridWidth then
@@ -258,6 +323,7 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 					columnNum = 1
 				end
 			end
+			
 		end
 	else
 		-- Pony Menu
@@ -272,7 +338,7 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 				Sound = "/SFX/Menu Sounds/GodBoonMenuClose",
 				Group = "Combat_Menu_Overlay",
 				X = resourceLocation.X,
-				Y = resourceLocation.Y + 10
+				Y = resourceLocation.Y + 10,
 			})
 			AttachLua({ Id = button.Id, Table = button })
 			button.Screen = screen
