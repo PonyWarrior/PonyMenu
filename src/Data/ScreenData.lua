@@ -23,7 +23,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					AnimationName = "GUI\\Shell\\Box_FullScreen",
+					Graphic = "Box_HalfScreen",
 					GroupName = "Combat_Menu_TraitTray",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -210,7 +210,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					AnimationName = "GUI\\Shell\\Box_FullScreen",
+					Graphic = "Box_HalfScreen",
 					GroupName = "Combat_Menu_TraitTray",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -544,7 +544,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					AnimationName = "GUI\\Shell\\Box_FullScreen",
+					Graphic = "Box_HalfScreen",
 					GroupName = "Combat_Menu",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -609,7 +609,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					AnimationName = "GUI\\Shell\\Box_FullScreen",
+					Graphic = "Box_HalfScreen",
 					GroupName = "Combat_Menu",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -652,81 +652,81 @@ end
 function mod.setupCommandData()
 	mod.CommandData = {
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Zeus",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Zeus",
+			IconScale = 0.2,
 			Name = "ZeusUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Poseidon",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Poseidon",
+			IconScale = 0.2,
 			Name = "PoseidonUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Aphrodite",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Aphrodite",
+			IconScale = 0.2,
 			Name = "AphroditeUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Ares",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Ares",
+			IconScale = 0.2,
 			Name = "AresUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Apollo",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Apollo",
+			IconScale = 0.2,
 			Name = "ApolloUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Demeter",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Demeter",
+			IconScale = 0.2,
 			Name = "DemeterUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Hephaestus",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hephaestus",
+			IconScale = 0.2,
 			Name = "HephaestusUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Hestia",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hestia",
+			IconScale = 0.2,
 			Name = "HestiaUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Artemis",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Artemis",
+			IconScale = 0.2,
 			Name = "ArtemisUpgrade",
 			Type = "Boon",
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Hermes",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hermes",
+			IconScale = 0.2,
 			Name = "HermesUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Hera",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hera",
+			IconScale = 0.2,
 			Name = "HeraUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Chaos",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Chaos",
+			IconScale = 0.2,
 			Name = "TrialUpgrade",
 			Type = "Boon"
 		},
 		{
-			Icon = "SpellDropPreview",
-			IconScale = 0.6,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Selene",
+			IconScale = 0.2,
 			Name = "SpellDrop",
 			Type = "Boon",
 			NoRarity = true,
@@ -740,24 +740,24 @@ function mod.setupCommandData()
 			NoRarity = true
 		},
 		{
-			Icon = "ArmorBoost",
-			IconScale = 0.6,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Arachne",
+			IconScale = 0.2,
 			Name = "NPC_Arachne_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\GhostEmote\\Smile",
-			IconScale = 0.6,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Narcissus",
+			IconScale = 0.2,
 			Name = "NPC_Narcissus_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\GhostEmote\\Grief",
-			IconScale = 0.6,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Echo",
+			IconScale = 0.2,
 			Name = "NPC_Echo_01",
 			Type = "Boon",
 			NoRarity = true,
@@ -772,39 +772,39 @@ function mod.setupCommandData()
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\Mana",
-			IconScale = 1.0,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Medea",
+			IconScale = 0.2,
 			Name = "NPC_Medea_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\Attributes\\Timeless",
-			IconScale = 0.7,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Icarus",
+			IconScale = 0.2,
 			Name = "NPC_Icarus_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Icons\\ManaCrystal",
-			IconScale = 1.0,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Circe",
+			IconScale = 0.2,
 			Name = "NPC_Circe_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Athena",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Athena",
+			IconScale = 0.2,
 			Name = "NPC_Athena_01",
 			Type = "Boon",
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Dionysus",
-			IconScale = 0.4,
+			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Dionysus",
+			IconScale = 0.2,
 			Name = "NPC_Dionysus_01",
 			Type = "Boon",
 			NoSpawn = true
@@ -874,14 +874,6 @@ function mod.setupCommandData()
 			Function = _PLUGIN.guid .. '.' .. 'LoadState'
 		},
 	}
-
-	if practicalGods then
-		for _, v in ipairs(mod.CommandData) do
-			if v.Icon == "BoonSymbolArtemisIcon" then
-				v.NoSpawn = false
-			end
-		end
-	end
 end
 
 mod.Internal = ModUtil.UpValues(function()

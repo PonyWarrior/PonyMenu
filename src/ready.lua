@@ -562,7 +562,7 @@ function mod.GetLootColorFromTrait(traitName)
 		return color
 	end
 	for upgradeName, boonData in pairs(mod.BoonData) do
-		if ArrayContains(boonData, traitName) then
+		if Contains(boonData, traitName) then
 			color = mod.GetLootColor(upgradeName)
 		end
 	end
@@ -570,26 +570,31 @@ function mod.GetLootColorFromTrait(traitName)
 end
 
 function mod.RemoveAllTraits()
-	local removedTraitData = {}
 	for i, traitData in pairs(CurrentRun.Hero.Traits) do
-		table.insert(removedTraitData, { Name = traitData.Name, Rarity = traitData.Rarity })
+		RemoveTrait(CurrentRun.Hero, traitData.Name)	
 	end
+end
 
-	for i, traitData in pairs(removedTraitData) do
-		RemoveTrait(CurrentRun.Hero, traitData.Name)
+function mod.RemoveAllBoons()
+	for i, traitData in pairs(CurrentRun.Hero.Traits) do
+		-- Only remove boons
+		if traitData.RarityLevels ~= nil and traitData.Slot ~= "Keepsake" and traitData.Slot ~= "Aspect" and traitData.UpgradeResourceCost == nil then
+			RemoveTrait(CurrentRun.Hero, traitData.Name)
+		end
 	end
 end
 
 function mod.ReloadEquipment()
-	EquipWeaponUpgrade(CurrentRun.Hero)
-	EquipKeepsake(CurrentRun.Hero)
-	EquipAssist(CurrentRun.Hero)
+	EquipWeaponUpgrade(CurrentRun.Hero, { SkipNewTraitHighlight = true, SkipUIUpdate = true })
+	EquipKeepsake(CurrentRun.Hero, GameState.LastAwardTrait, { FromLoot = true, SkipNewTraitHighlight = true, AddToCache = true })
+	EquipFamiliar(nil, { Unit = CurrentRun.Hero, FamiliarName = GameState.EquippedFamiliar })
+	EquipMetaUpgrades(CurrentRun.Hero, { SkipNewTraitHighlight = true })
 end
 
 function mod.ClearAllBoons()
-	mod.RemoveAllTraits()
-	mod.ReloadEquipment()
-	ClearUpgrades()
+	mod.RemoveAllBoons()
+	-- mod.ReloadEquipment()
+	-- ClearUpgrades()
 end
 
 function mod.IsBoonTrait(traitName)
