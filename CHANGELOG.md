@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.10] - 2025-06-22
+
 ### Changed
 
 - Fixed not being able to plant multiple seeds at once with the mod installed
@@ -135,7 +137,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.9...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.10...HEAD
+[0.10.10]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.9...0.10.10
 [0.10.9]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.8...0.10.9
 [0.10.8]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.7...0.10.8
 [0.10.7]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.6...0.10.7
