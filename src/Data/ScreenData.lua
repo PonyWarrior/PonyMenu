@@ -23,7 +23,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					Graphic = "Box_HalfScreen",
+					Graphic = "Box_FullScreen",
 					GroupName = "Combat_Menu_TraitTray",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -210,7 +210,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					Graphic = "Box_HalfScreen",
+					Graphic = "Box_FullScreen",
 					GroupName = "Combat_Menu_TraitTray",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -544,7 +544,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					Graphic = "Box_HalfScreen",
+					Graphic = "Box_FullScreen",
 					GroupName = "Combat_Menu",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -609,7 +609,7 @@ function mod.setupScreenData()
 
 				Background =
 				{
-					Graphic = "Box_HalfScreen",
+					Graphic = "Box_FullScreen",
 					GroupName = "Combat_Menu",
 					X = ScreenCenterX,
 					Y = ScreenCenterY,
@@ -652,75 +652,75 @@ end
 function mod.setupCommandData()
 	mod.CommandData = {
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Zeus",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Zeus",
+			IconScale = 0.3,
 			Name = "ZeusUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Poseidon",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Poseidon",
+			IconScale = 0.3,
 			Name = "PoseidonUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Aphrodite",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Aphrodite",
+			IconScale = 0.3,
 			Name = "AphroditeUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Ares",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Ares",
+			IconScale = 0.3,
 			Name = "AresUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Apollo",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Apollo",
+			IconScale = 0.3,
 			Name = "ApolloUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Demeter",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Demeter",
+			IconScale = 0.3,
 			Name = "DemeterUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hephaestus",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Hephaestus",
+			IconScale = 0.3,
 			Name = "HephaestusUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hestia",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Hestia",
+			IconScale = 0.3,
 			Name = "HestiaUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Artemis",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Artemis",
+			IconScale = 0.3,
 			Name = "ArtemisUpgrade",
 			Type = "Boon",
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hermes",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Hermes",
+			IconScale = 0.3,
 			Name = "HermesUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Hera",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Hera",
+			IconScale = 0.3,
 			Name = "HeraUpgrade",
 			Type = "Boon"
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Chaos",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Chaos",
+			IconScale = 0.3,
 			Name = "TrialUpgrade",
 			Type = "Boon"
 		},
@@ -764,8 +764,8 @@ function mod.setupCommandData()
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Screens\\BoonSelectSymbols\\Hades",
-			IconScale = 0.4,
+			IconPath = "PonyWarrior-PonyMenu\\Hades",
+			IconScale = 0.3,
 			Name = "NPC_LordHades_01",
 			Type = "Boon",
 			NoRarity = true,
@@ -796,15 +796,15 @@ function mod.setupCommandData()
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Athena",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Athena",
+			IconScale = 0.3,
 			Name = "NPC_Athena_01",
 			Type = "Boon",
 			NoSpawn = true
 		},
 		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Dionysus",
-			IconScale = 0.2,
+			IconPath = "PonyWarrior-PonyMenu\\Dionysus",
+			IconScale = 0.3,
 			Name = "NPC_Dionysus_01",
 			Type = "Boon",
 			NoSpawn = true
@@ -835,7 +835,7 @@ function mod.setupCommandData()
 		},
 		{
 			IconPath = "Items\\Resources\\Common\\MoneyDrop_Text",
-			IconScale = 1.0,
+			IconScale = 0.8,
 			Name = mod.Locale.ConsumableSelectorTitle,
 			Description = mod.Locale.ConsumableSelectorDescription,
 			Type = "Command",
@@ -843,7 +843,7 @@ function mod.setupCommandData()
 		},
 		{
 			IconPath = "GUI\\Icons\\LobAmmo",
-			IconScale = 1.0,
+			IconScale = 0.8,
 			Name = mod.Locale.BossSelectorTitle,
 			Description = mod.Locale.BossSelectorDescription,
 			Type = "Command",
@@ -851,7 +851,7 @@ function mod.setupCommandData()
 		},
 		{
 			IconPath = "GUI\\Graybox\\Button_Close",
-			IconScale = 0.8,
+			IconScale = 0.7,
 			Name = mod.Locale.KillPlayerTitle,
 			Description = mod.Locale.KillPlayerDescription,
 			Type = "Command",
@@ -859,7 +859,7 @@ function mod.setupCommandData()
 		},
 		{
 			IconPath = "GUI\\Shell\\CloudSyncConflict",
-			IconScale = 0.6,
+			IconScale = 0.5,
 			Name = mod.Locale.SaveStateTitle,
 			Description = mod.Locale.SaveStateDescription,
 			Type = "Command",
@@ -867,7 +867,7 @@ function mod.setupCommandData()
 		},
 		{
 			IconPath = "GUI\\Shell\\CloudSuccess",
-			IconScale = 0.6,
+			IconScale = 0.5,
 			Name = mod.Locale.LoadStateTitle,
 			Description = mod.Locale.LoadStateDescription,
 			Type = "Command",

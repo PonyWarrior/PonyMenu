@@ -13,6 +13,9 @@ mod.Locales = mod.Locales or {}
 
 data = {}
 
+local package = rom.path.combine(_PLUGIN.plugins_data_mod_folder_path, _PLUGIN.guid)
+modutil.mod.Path.Wrap("SetupMap", function(base) LoadPackages({ Name = package, })base()end)
+
 ModUtil.LoadOnce(function()
 	if not rom.game.GameState.PonyMenu then
 		rom.game.GameState.PonyMenu = { Data = {} }
@@ -96,7 +99,7 @@ end
 ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categoryIndex, args)
 	args = args or {}
 	local components = screen.Components
-	
+
 	-- Cleanup prev category
 	local prevCategory = screen.ItemCategories[screen.ActiveCategoryIndex]
 	--Mod start
@@ -182,7 +185,11 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 		CallFunctionName( category.OpenFunctionName, screen )
 		return
 	end
-	
+
+	if screen.Args.PlantTarget ~= nil and GameState.WorldUpgrades.WorldUpgradeGardenMultiPlant then
+		components.PinButton.OnPressedFunctionName = "GardenMultiPlantSeed"
+	end
+
 	local resourceLocation = { X = screen.GridStartX, Y = screen.GridStartY }
 	local columnNum = 1
 	-- Mod start
@@ -212,18 +219,25 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 					end
 				end
 
+				local alpha = nil
+				local alphaTarget = nil
+				local alphaTargetDuration = nil
+				if args.FirstOpen then
+					alpha = 0.0
+					alphaTarget = 1.0
+					alphaTargetDuration	= 0.6
+				end
 				local button = CreateScreenComponent({ Name = "ButtonInventoryItem",
 					Scale = resourceData.IconScale or 1.0,
 					Sound = "/SFX/Menu Sounds/IrisMenuBack",
 					Group = "Combat_Menu_Overlay",
 					X = resourceLocation.X,
 					Y = resourceLocation.Y,
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration	= 0.6,
 				})
-				if args.FirstOpen then
-					SetAlpha({ Id = button.Id, Fraction = 0.0 })
-					SetAlpha({ Id = button.Id, Fraction = 1.0, Duration = 0.6 })
-				end
-				AttachLua({ Id = button.Id, Table = button })
+				
 				button.Screen = screen
 				button.ResourceData = resourceData
 				components[resourceName] = button
@@ -233,11 +247,10 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 					Group = "Combat_Menu_Overlay_Additive",
 					X = resourceLocation.X,
 					Y = resourceLocation.Y,
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration	= 0.6,
 				})
-				if args.FirstOpen then
-					SetAlpha({ Id = buttonHighlight.Id, Fraction = 0.0 })
-					SetAlpha({ Id = buttonHighlight.Id, Fraction = 1.0, Duration = 0.6 })
-				end
 				components[resourceName.."Highlight"] = buttonHighlight
 				button.Highlight = buttonHighlight
 			
@@ -245,6 +258,20 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 					if HasResource( resourceName, 1 ) then
 						button.ContextualAction = "Menu_Plant"
 						button.OnPressedFunctionName = "GardenPlantSeed"
+
+						if GameState.WorldUpgrades.WorldUpgradeGardenMultiPlant then
+							local numEmptyPlots = 0
+							for id, plot in pairs( GameState.GardenPlots ) do
+								if plot.SeedName == nil then
+									numEmptyPlots = numEmptyPlots + 1
+								end
+							end
+							if numEmptyPlots > 1 and HasResource( resourceName, 2 ) then
+								button.PinContextualAction = "Menu_MultiPlant"
+								button.PlantAmount = math.min( numEmptyPlots, GameState.Resources[resourceName] )
+							end
+						end
+
 						if #GardenData.Seeds[resourceName].RandomOutcomes == 1 then
 							local growsIntoName = GetFirstKey( GardenData.Seeds[resourceName].RandomOutcomes[1].AddResources )
 							local amountNeededByPins = GetResourceAmountNeededByPins( growsIntoName )
@@ -293,12 +320,15 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 
 				button.Viewable = not screen.Args.CategoryLocked or button.OnPressedFunctionName ~= nil
 				if button.Viewable then
-					-- highlight the last resource you collected
-					if resourceName == (args.InitialSelection or GameState.UnviewedLastResourceGained) then
+					-- highlight the initial selection, or the last resource you collected
+					if resourceName == args.InitialSelection then
+						screen.CursorStartX = resourceLocation.X
+						screen.CursorStartY = resourceLocation.Y
+					elseif resourceName == GameState.UnviewedLastResourceGained then
 						UnviewedLastResourceGainedPresentation( screen, button )
 						GameState.UnviewedLastResourceGained = nil
-						TeleportCursor({ OffsetX = resourceLocation.X, OffsetY = resourceLocation.Y, ForceUseCheck = true })
-						screen.CursorSet = true
+						screen.CursorStartX = resourceLocation.X
+						screen.CursorStartY = resourceLocation.Y
 					end
 
 					-- mark unviewed resources as "new"

@@ -17,7 +17,7 @@ The mod is available in the following languages :
 - English : PonyWarrior
 - Français : PonyWarrior
 - Portugês Brasil : Seceip
-- 简体中文 : PonyWarrior
+- 简体中文 : PonyWarrior / CloudBank-3055
 - 繁体中文 : PonyWarrior
 
 If you wish to translate this mod in your language, make a pull request following the example here : https://github.com/PonyWarrior/PonyMenu/pull/1/files

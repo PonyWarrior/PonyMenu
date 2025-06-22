@@ -44,6 +44,7 @@ import_as_fallback(rom.game)
 local function on_ready()
 	-- what to do when we are ready, but not re-do on reload.
 	if config.Enabled == false then return end
+	PonyMenu_do_imports()
 	import 'ready.lua'
 	import 'Text/en.lua'
 	import 'Text/fr.lua'
@@ -69,3 +70,32 @@ local loader = reload.auto_single()
 modutil.once_loaded.game(function()
 	loader.load(on_ready, on_reload)
 end)
+
+function PonyMenu_do_imports()
+	if config.enabled == false then return end
+	local GUIFile = rom.path.combine(rom.paths.Content, 'Game/Obstacles/GUI.sjson')
+
+	local gui_order = {
+		"Name", "InheritFrom", "DisplayInEditor", "Thing"
+	}
+
+	local gui_order_2 = {
+		"EditorOutlineDrawBounds", "Graphic"
+	}
+
+	local newSubItem = sjson.to_object({
+		EditorOutlineDrawBounds = false,
+		Graphic = "PonyWarrior-PonyMenu\\Box_FullScreen"
+	}, gui_order_2)
+
+	local newItem = sjson.to_object({
+		Name = "Box_FullScreen",
+		InheritFrom = "1_BaseGUIObstacle",
+		DisplayInEditor = false,
+		Thing = newSubItem,
+	}, gui_order)
+
+	sjson.hook(GUIFile, function(data)
+		table.insert(data.Obstacles, newItem)
+	end)
+end

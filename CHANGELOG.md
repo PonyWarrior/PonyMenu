@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Fixed not being able to plant multiple seeds at once with the mod installed
+- Imported removed assets from this update (god icons and menu background)
+
 ## [0.10.9] - 2025-06-18
 
 ### Changed
