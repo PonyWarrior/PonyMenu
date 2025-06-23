@@ -510,6 +510,10 @@ function mod.setupScreenData()
 				P_Boss01 = {
 					Name = "Prometheus_Full",
 					Portrait = "Codex_Portrait_Prometheus",
+				},
+				Q_Boss02 = {
+					Name = "TyphonHead_Full",
+					Portrait = "Codex_Portrait_Typhon",
 				}
 			},
 			TitleText =

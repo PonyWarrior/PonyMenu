@@ -653,15 +653,14 @@ function CreateNewCustomRun(room)
 	RunStateInit()
 
 	if args.RunOverrides ~= nil then
-		for key, value in pairs(args.RunOverrides) do
-			CurrentRun[key] = value
-		end
+		OverwriteTableKeys( CurrentRun, args.RunOverrides )
 	end
 
 	for name, value in pairs(GameState.ShrineUpgrades) do
 		ShrineUpgradeExtractValues(name)
 	end
 
+	CurrentRun.ActiveBounty = args.ActiveBounty
 	CurrentRun.ForceNextEncounterData = args.Encounter
 	CurrentRun.Hero = CreateNewHero(prevRun, args)
 
@@ -677,8 +676,9 @@ function CreateNewCustomRun(room)
 
 	local bountyData = BountyData[args.ActiveBounty]
 	if bountyData ~= nil and bountyData.StartingTraits ~= nil then
-		for i, traitData in ipairs(bountyData.StartingTraits) do
-			AddTrait(CurrentRun.Hero, traitData.Name, traitData.Rarity)
+		LoadActiveBountyPackages()
+		for i, traitData in ipairs( bountyData.StartingTraits ) do
+			AddTrait( CurrentRun.Hero, traitData.Name, traitData.Rarity, { FromLoot = true })
 		end
 	end
 
@@ -687,17 +687,16 @@ function CreateNewCustomRun(room)
 	-- EquipFamiliar(nil, { Unit = CurrentRun.Hero, FamiliarName = GameState.EquippedFamiliar, SkipNewTraitHighlight = true })
 	-- EquipWeaponUpgrade(CurrentRun.Hero, { SkipNewTraitHighlight = true })
 	-- EquipMetaUpgrades(CurrentRun.Hero, { SkipNewTraitHighlight = true })
+	mod.LoadState(true)
 	UpdateRunHistoryCache(CurrentRun)
 
 	CurrentRun.BonusUnusedWeaponName = GetRandomUnequippedWeapon()
 	CurrentRun.ActiveBiomeTimer = GetNumShrineUpgrades("BiomeSpeedShrineUpgrade") > 0
-	CurrentRun.NumRerolls = GetTotalHeroTraitValue("RerollCount")
+	CurrentRun.NumRerolls = GetTotalHeroTraitValue( "RerollCount" )
 	CurrentRun.NumTalentPoints = GetTotalHeroTraitValue("TalentPointCount")
-	CurrentRun.ActiveBounty = args.ActiveBounty
 	CurrentRun.ActiveBountyClears = GameState.PackagedBountyClears[CurrentRun.ActiveBounty] or 0
 	CurrentRun.ActiveBountyAttempts = GameState.PackagedBountyAttempts[CurrentRun.ActiveBounty] or 0
-
-	CurrentRun.ResourceNodesSeen = {}
+	CurrentRun.SpellCharge = 5000
 
 	if ConfigOptionCache.EasyMode then
 		CurrentRun.EasyModeLevel = GameState.EasyModeLevel
@@ -739,10 +738,10 @@ function StartNewCustomRun(room)
 	EndRun(currentRun)
 	CurrentHubRoom = nil
 	PreviousDeathAreaRoom = nil
+
+	HideCombatUI("StartOver")
 	currentRun = CreateNewCustomRun(room)
-	StopSound({ Id = AudioState.AmbientMusicId, Duration = 1.0 })
-	AudioState.AmbientMusicId = nil
-	AudioState.AmbientTrackName = nil
+	StopMusicianMusic({ Duration = 1.0 })
 	ResetObjectives()
 
 	SetConfigOption({ Name = "FlipMapThings", Value = false })
@@ -753,14 +752,14 @@ function StartNewCustomRun(room)
 	-- RequestSave({ StartNextMap = currentRun.CurrentRoom.Name, SaveName = "_Temp", DevSaveName = CreateDevSaveName(currentRun) })
 	ValidateCheckpoint({ Value = true })
 
+	UnblockCombatUI( "StartOver" )
+	WaitForSpeechFinished()
 	RemoveInputBlock({ Name = "StartOver" })
-	RemoveTimerBlock(currentRun, "StartOver")
+	RemoveTimerBlock( currentRun, "StartOver" )
 	AddInputBlock({ Name = "MapLoad" })
-	AddTimerBlock(CurrentRun, "MapLoad")
+	AddTimerBlock( CurrentRun, "MapLoad" )
 
 	LoadMap({ Name = currentRun.CurrentRoom.Name, ResetBinks = true })
-	mod.LoadState(true)
-	BuildMetaupgradeCache()
 end
 
 function mod.KillPlayer()

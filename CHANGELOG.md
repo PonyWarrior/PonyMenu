@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Fixed Boss Selector crashing
+- Fixed inventory tab background disappearing
+
 ## [0.10.11] - 2025-06-22
 
 ### Changed
