@@ -106,6 +106,20 @@ end
 function mod.GiveBoonToPlayer(screen, button)
 	local boon = button.Boon
 	if not HeroHasTrait(boon) then
+		if TraitData[boon].Slot == "Spell" then
+			if mod.DoesPlayerHaveHex() then
+				local bool = true
+				while bool do
+					bool = mod.HandleSpellRemoval()
+				end
+			end
+			local spell = boon:gsub("Trait", "")
+			spell = spell:gsub("Spell", "")
+			CurrentRun.Hero.SlottedSpell = DeepCopyTable(SpellData[spell])
+			CurrentRun.Hero.SlottedSpell.HasDuoTalent = SessionMapState.DuoTalentEligibleSpell[spell]
+			CurrentRun.Hero.SlottedSpell.Talents = DeepCopyTable(CreateTalentTree(SpellData[spell]))
+			UpdateTalentPointInvestedCache()
+		end
 		AddTraitToHero({
 			TraitData = GetProcessedTraitData({
 				Unit = CurrentRun.Hero,
@@ -992,9 +1006,26 @@ function mod.HandleBoonManagerClick(screen, button)
 			return
 		elseif screen.Mode == "Delete" then
 			screen.BoonsList[screen.CurrentPage][button.Index] = nil
+			if button.Boon.Slot == "Spell" then
+				local bool = true
+				-- only way to get rid of the talents
+				while bool do
+					bool = mod.HandleSpellRemoval()
+				end
+				local ids = {}
+				for i, component in pairs(screen.Components) do
+					if component.ToDestroy then
+						table.insert(ids, component.Id)
+					end
+				end
+				Destroy({ Ids = ids })
+				mod.LoadPageBoons(screen)
+				mod.BoonManagerLoadPage(screen)
+				return
+			end
 			RemoveTrait(CurrentRun.Hero, button.Boon.Name)
 			local ids = { button.Id, button.Background.Id }
-			if button.Icon then
+			if button.Icon then 
 				table.insert(ids, button.Icon.Id)
 			end
 			if button.ElementIcon then
@@ -1004,6 +1035,25 @@ function mod.HandleBoonManagerClick(screen, button)
 			return
 		end
 	end
+end
+
+function mod.HandleSpellRemoval()
+	local deletedSomething = false
+	for i, traitData in pairs(CurrentRun.Hero.Traits) do
+		if traitData.IsTalent then
+			deletedSomething = true
+			RemoveTrait(CurrentRun.Hero, traitData.Name)
+		elseif traitData.Slot == "Spell" then
+			deletedSomething = true
+			for _, weapon in pairs(traitData.PreEquipWeapons) do
+				UnequipWeapon({ DestinationId = CurrentRun.Hero.ObjectId, Name = weapon, UnloadPackages = false })
+			end
+			RemoveTrait(CurrentRun.Hero, traitData.Name)
+			CurrentRun.Hero.SlottedSpell = nil
+			UpdateTalentPointInvestedCache()
+		end
+	end
+	return deletedSomething
 end
 
 function mod.BoonManagerChangePage(screen, button)
@@ -1661,7 +1711,7 @@ end
 
 function mod.DoesPlayerHaveHex()
 	for i, traitData in pairs (CurrentRun.Hero.Traits) do
-		if traitData.Slot and traitData.Slot == "Spell" then
+		if traitData.Slot and traitData.Slot == "Spell" and CurrentRun.Hero.SlottedSpell ~= nil then
 			return true
 		end
 	end

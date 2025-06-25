@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Reworked handling of Hexes
+- Fixed various crashes related to Hexes
+- Picking an Hex while having a Hex already will remove the equipped Hex and attached Path of Stars upgrades before equipping the new Hex
+- Deleting a Hex in the Boon Manager will also delete all its attached Path of Stars upgrades
+
+### Changed
+
 - Fixed Boss Selector crashing
 - Fixed inventory tab background disappearing
 
