@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.14] - 2025-06-26
+
 ### Changed
 
 - Fixed downgrading rarity in boon manager
@@ -163,7 +165,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.13...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.14...HEAD
+[0.10.14]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.13...0.10.14
 [0.10.13]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.12...0.10.13
 [0.10.12]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.11...0.10.12
 [0.10.11]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.10...0.10.11
