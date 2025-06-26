@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Fixed downgrading rarity in boon manager
+
 ## [0.10.13] - 2025-06-25
 
 ### Changed

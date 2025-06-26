@@ -892,8 +892,8 @@ function mod.HandleBoonManagerClick(screen, button)
 			local upgradableTraits = {}
 			local upgradedTraits = {}
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
-				if TraitData[traitData.Name] and traitData.Rarity ~= nil and GetDowngradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil
-					and traitData.RarityLevels[GetDowngradedRarity(traitData.Rarity)] ~= nil and mod.IsBoonManagerValid(traitData.Name) then
+				if TraitData[traitData.Name] and traitData.Rarity ~= nil and mod.GetDowngradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil
+					and traitData.RarityLevels[mod.GetDowngradedRarity(traitData.Rarity)] ~= nil and mod.IsBoonManagerValid(traitData.Name) then
 					if Contains(upgradableTraits, traitData) or traitData.Rarity == "Legendary" then
 					else
 						table.insert(upgradableTraits, traitData)
@@ -904,7 +904,7 @@ function mod.HandleBoonManagerClick(screen, button)
 				while not IsEmpty(upgradableTraits) do
 					local traitData = RemoveRandomValue(upgradableTraits)
 					upgradedTraits[traitData.Name] = true
-					local rarity = GetDowngradedRarity(traitData.Rarity)
+					local rarity = mod.GetDowngradedRarity(traitData.Rarity)
 					RemoveTrait(CurrentRun.Hero, traitData.Name)
 					AddTraitToHero({
 						TraitData = GetProcessedTraitData({
@@ -985,9 +985,9 @@ function mod.HandleBoonManagerClick(screen, button)
 			end
 			return
 		elseif screen.Mode == "Rarity" and screen.LockedModeButton.Substract == true then
-			if TraitData[button.Boon.Name] and button.Boon.Rarity ~= nil and GetDowngradedRarity(button.Boon.Rarity) ~= nil and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[GetDowngradedRarity(button.Boon.Rarity)] ~= nil then
+			if TraitData[button.Boon.Name] and button.Boon.Rarity ~= nil and mod.GetDowngradedRarity(button.Boon.Rarity) ~= nil and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[mod.GetDowngradedRarity(button.Boon.Rarity)] ~= nil then
 				local count = GetTraitCount(CurrentRun.Hero, button.Boon)
-				button.Boon.Rarity = GetDowngradedRarity(button.Boon.Rarity)
+				button.Boon.Rarity = mod.GetDowngradedRarity(button.Boon.Rarity)
 				SetColor({ Id = button.Background.Id, Color = Color["BoonPatch" .. button.Boon.Rarity] })
 				RemoveTrait(CurrentRun.Hero, button.Boon.Name)
 				AddTraitToHero({
@@ -1034,6 +1034,19 @@ function mod.HandleBoonManagerClick(screen, button)
 			Destroy({ Ids = ids })
 			return
 		end
+	end
+end
+
+-- removed from base game in Unseen update
+function mod.GetDowngradedRarity( baseRarity )
+	local rarityTable = TraitRarityData.RarityUpgradeOrder
+
+	if HasHeroTraitValue("ReplaceUpgradedRarityTable") then
+		rarityTable = GetHeroTraitValues("ReplaceUpgradedRarityTable")[1]
+	end
+	local key = GetKey( rarityTable, baseRarity )
+	if key and rarityTable[key - 1] then
+		return rarityTable[key - 1]
 	end
 end
 
