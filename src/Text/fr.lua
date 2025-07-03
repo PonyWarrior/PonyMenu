@@ -6,10 +6,11 @@ public.AddLocale("fr", {
 
 	BoonSelectorTitle = "Sélectionneur de bienfaits",
 	BoonSelectorSpawnButton = "Invoquer un bienfait",
-	BoonSelectorCommonButton = "Common",
+	BoonSelectorCommonButton = "Quelconque",
 	BoonSelectorRareButton = "Rare",
-	BoonSelectorEpicButton = "Epic",
-	BoonSelectorHeroicButton = "Heroic",
+	BoonSelectorEpicButton = "Épique",
+	BoonSelectorHeroicButton = "Héroïque",
+	BoonSelectorLegendaryButton = "Légendaire",
 
 	BoonManagerTitle = "Gestionnaire de bienfaits",
 	BoonManagerSubtitle = "Cliquez le mode Niveau ou Rareté à nouveau pour changer entre Addition(+) et Soustraction(-).",

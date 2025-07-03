@@ -6,10 +6,11 @@ public.AddLocale("zh-TW", {
 
 	BoonSelectorTitle = "祝福選擇器",
 	BoonSelectorSpawnButton = "召見祝福",
-	BoonSelectorCommonButton = "Common",
-	BoonSelectorRareButton = "Rare",
-	BoonSelectorEpicButton = "Epic",
-	BoonSelectorHeroicButton = "Heroic",
+	BoonSelectorCommonButton = "設為普通",
+	BoonSelectorRareButton = "設為稀有",
+	BoonSelectorEpicButton = "設為史詩",
+	BoonSelectorHeroicButton = "設為英雄",
+	BoonSelectorLegendaryButton = "設為傳奇",
 
 	BoonManagerTitle = "祝福經理",
 	BoonManagerSubtitle = "為了換加法(+)和劍法(-)，再點選級運作方式或稀有度運作方式。",

@@ -66,6 +66,9 @@ local function setupMainData()
 		NPC_Dionysus_01 = {}
 	}
 
+	mod.HammerRarityUpgradeOrder = { "Common", "Legendary" }
+
+
 	mod.ConsumableData = {
 		-- "HealDrop",
 		-- "RoomMoneyDrop",

@@ -10,6 +10,7 @@ public.AddLocale("zh-CN", {
 	BoonSelectorRareButton = "设为稀有",
 	BoonSelectorEpicButton = "设为史诗",
 	BoonSelectorHeroicButton = "设为英雄",
+	BoonSelectorLegendaryButton = "设为传奇",
 
 	BoonManagerTitle = "祝福管理器",
 	BoonManagerSubtitle = "点击左下角的等级按钮或稀有度按钮，再次点击可切换升级(+)与降级(-)，最后点击要改变的祝福。",

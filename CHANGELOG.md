@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Boon Selector now reloads the page when you select a rarity
+- Boon Selector now correctly displays Daedalus hammer upgrades and supports selecting the Icarus upgraded versions
+- Boon Selector rarity buttons no longer switch to english after being clicked on supported non-english locales
+- Boon Manager now reloads the page altering the rarity or level of any boon
+- Boon Manager now correctly displays level scaled boon values
+- Boon Manager rarity mode can no longer upgrade Arachne dresses (it had no effect)
+- Boon Manager rarity mode can now upgrade and downgrade compatible Daedalus hammer upgrades
+- Various logic improvements
+- Updated all missing translations on non-english locales
+
 ## [0.10.14] - 2025-06-26
 
 ### Changed

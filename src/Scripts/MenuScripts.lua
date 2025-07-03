@@ -25,9 +25,17 @@ function mod.OpenBoonSelector(screen, button)
 	local lColor = mod.GetLootColor(itemData.Name) or Color.White
 	if itemData.NoRarity then
 		children.CommonButton = nil
+		children.LegendaryButton = nil
 		children.RareButton = nil
 		children.EpicButton = nil
 		children.HeroicButton = nil
+	elseif itemData.Hammer then
+		screen.IsHammer = true
+		children.RareButton = nil
+		children.EpicButton = nil
+		children.HeroicButton = nil
+	else
+		children.LegendaryButton = nil
 	end
 	if itemData.NoSpawn then
 		children.SpawnButton = nil
@@ -89,18 +97,38 @@ function mod.CloseBoonSelector(screen)
 	notifyExistingWaiters("BoonSelector")
 end
 
+function mod.BoonSelectorReloadPage(screen)
+	local ids = {}
+	for i, component in pairs(screen.Components) do
+		if component.ToDestroy then
+			table.insert(ids, component.Id)
+		end
+	end
+	Destroy({ Ids = ids })
+	mod.BoonSelectorLoadPage(screen)
+end
+
 function mod.SpawnBoon(screen, button)
 	CreateLoot({ Name = screen.Upgrade, OffsetX = 100, SpawnPoint = CurrentRun.Hero.ObjectId })
 	mod.CloseBoonSelector(screen)
 end
 
 function mod.ChangeBoonSelectorRarity(screen, button)
-	if screen.LockedRarityButton ~= nil and screen.LockedRarityButton ~= button then
-		ModifyTextBox({ Id = screen.LockedRarityButton.Id, Text = screen.LockedRarityButton.Rarity })
+	if screen.LockedRarityButton ~= nil and screen.LockedRarityButton == button then
+		--nothing to change
+		return
+	elseif screen.LockedRarityButton ~= nil and screen.LockedRarityButton ~= button then
+		screen.LockedRarityButton.Text = screen.LockedRarityButton.Text:gsub(">>", "")
+		screen.LockedRarityButton.Text = screen.LockedRarityButton.Text:gsub("<<", "")
+		ModifyTextBox({ Id = screen.LockedRarityButton.Id, Text = screen.LockedRarityButton.Text })
 	end
 	screen.Rarity = button.Rarity
 	screen.LockedRarityButton = button
-	ModifyTextBox({ Id = button.Id, Text = ">>" .. button.Rarity .. "<<" })
+	if not string.match(button.Text, ">>") then
+		button.Text = ">>" .. button.Text .. "<<"
+		ModifyTextBox({ Id = button.Id, Text = button.Text })
+	end
+	mod.BoonSelectorReloadPage(screen)
 end
 
 function mod.GiveBoonToPlayer(screen, button)
@@ -155,16 +183,23 @@ function mod.BoonSelectorLoadPage(screen)
 				local boonData = boon.BoonData
 				displayedTraits[boonData.Name] = true
 				local color = mod.GetLootColorFromTrait(boonData.Name)
-				if boonData.Rarity == nil or boonData.Rarity == "Common" then
-					local tdata = TraitData[boonData.Name]
+				local tdata = TraitData[boonData.Name]
+				if not screen.IsHammer then
 					if tdata.RarityLevels and tdata.RarityLevels.Legendary then
 						boonData.Rarity = "Legendary"
 					elseif tdata.IsDuoBoon then
 						boonData.Rarity = "Duo"
 					else
+						boonData.Rarity = screen.Rarity
+					end
+				else
+					if tdata.RarityLevels and tdata.RarityLevels.Legendary then
+						boonData.Rarity = screen.Rarity
+					else
 						boonData.Rarity = "Common"
 					end
 				end
+
 				local screendata = DeepCopyTable(ScreenData.UpgradeChoice)
 				local upgradeName = boonData.Name
 				local upgradeData = nil
@@ -253,9 +288,10 @@ function mod.BoonSelectorLoadPage(screen)
 				end
 
 				color = Color["BoonPatch" .. rarity]
-				if upgradeData.CustomRarityColor then
-					color = upgradeData.CustomRarityColor
-				elseif upgradeData.CustomRarityName == "Boon_Infusion" then
+				-- if upgradeData.CustomRarityColor then
+				-- 	color = upgradeData.CustomRarityColor
+				-- else
+				if upgradeData.CustomRarityName == "Boon_Infusion" then
 					color = Color.BoonPatchElemental
 				end
 				--#region Text
@@ -574,6 +610,7 @@ function mod.OpenBoonManager(screen, button)
 
 	-- Display
 	children.CommonButton = nil
+	children.LegendaryButton = nil
 	children.RareButton = nil
 	children.EpicButton = nil
 	children.HeroicButton = nil
@@ -786,39 +823,26 @@ function mod.HandleBoonManagerClick(screen, button)
 	if screen.AllMode ~= nil and screen.AllMode then
 		if screen.Mode == "Level" and screen.LockedModeButton.Add == true then
 			local upgradableTraits = {}
-			local upgradedTraits = {}
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
 				screen.Traits = CurrentRun.Hero.Traits
 				local numTraits = traitData.StackNum or 1
-				if numTraits < 100 and traitData.RemainingUses == nil and IsGodTrait(traitData.Name) and not traitData.BlockStacking
-					and (not traitData.RequiredFalseTrait or traitData.RequiredFalseTrait ~= traitData.Name) and mod.IsBoonManagerValid(traitData.Name) then
+				if numTraits < 100 and traitData.RemainingUses == nil and IsGodTrait(traitData.Name) and not traitData.BlockStacking and (not traitData.RequiredFalseTrait or traitData.RequiredFalseTrait ~= traitData.Name) and mod.IsBoonManagerValid(traitData.Name) then
 					upgradableTraits[traitData.Name] = true
 				end
 			end
 			if not IsEmpty(upgradableTraits) then
-				for _, levelbutton in pairs(screen.Components) do
-					if not levelbutton.IsBackground and levelbutton.Boon ~= nil then
-						levelbutton.Boon.Level = levelbutton.Boon.Level + 1
-						ModifyTextBox({
-							Id = levelbutton.Background.Id,
-							Text = mod.Locale.BoonManagerLevelDisplay ..
-								levelbutton.Boon.Level
-						})
-					end
-				end
 				while not IsEmpty(upgradableTraits) do
 					local name = RemoveRandomKey(upgradableTraits)
-					upgradedTraits[name] = true
 					local traitData = GetHeroTrait(name)
 					local stacks = GetTraitCount(name)
 					stacks = stacks + 1
 					IncreaseTraitLevel(traitData, stacks)
 				end
 			end
+			mod.BoonManagerReloadPage(screen)
 			return
 		elseif screen.Mode == "Level" and screen.LockedModeButton.Substract == true then
 			local upgradableTraits = {}
-			local upgradedTraits = {}
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
 				screen.Traits = CurrentRun.Hero.Traits
 				local numTraits = traitData.StackNum or 1
@@ -827,19 +851,8 @@ function mod.HandleBoonManagerClick(screen, button)
 				end
 			end
 			if not IsEmpty(upgradableTraits) then
-				for _, levelbutton in pairs(screen.Components) do
-					if not levelbutton.IsBackground and levelbutton.Boon ~= nil then
-						levelbutton.Boon.Level = levelbutton.Boon.Level - 1
-						ModifyTextBox({
-							Id = levelbutton.Background.Id,
-							Text = mod.Locale.BoonManagerLevelDisplay ..
-								levelbutton.Boon.Level
-						})
-					end
-				end
 				while not IsEmpty(upgradableTraits) do
 					local name = RemoveRandomKey(upgradableTraits)
-					upgradedTraits[name] = true
 					local traitData = GetHeroTrait(name)
 					local stacks = GetTraitCount(name)
 					stacks = stacks - 1
@@ -849,22 +862,33 @@ function mod.HandleBoonManagerClick(screen, button)
 			return
 		elseif screen.Mode == "Rarity" and screen.LockedModeButton.Add == true then
 			local upgradableTraits = {}
-			local upgradedTraits = {}
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
-				if TraitData[traitData.Name] and traitData.Rarity ~= nil and GetUpgradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil
-					and traitData.RarityLevels[GetUpgradedRarity(traitData.Rarity)] ~= nil and mod.IsBoonManagerValid(traitData.Name) then
-					if Contains(upgradableTraits, traitData) or traitData.Rarity == "Legendary" then
-					else
-						table.insert(upgradableTraits, traitData)
+				if TraitData[traitData.Name] and traitData.Rarity ~= nil and not traitData.CostumeTrait then
+					local sanityCheck = false
+					if not traitData.IsHammerTrait and GetUpgradedRarity(traitData.Rarity) and traitData.RarityLevels ~= nil and traitData.RarityLevels[GetUpgradedRarity(traitData.Rarity)] ~= nil then
+						sanityCheck = true
+					elseif traitData.IsHammerTrait and GetUpgradedRarity(traitData.Rarity, mod.HammerRarityUpgradeOrder) and traitData.RarityLevels ~= nil and traitData.RarityLevels[GetUpgradedRarity(traitData.Rarity, mod.HammerRarityUpgradeOrder)] ~= nil then
+						sanityCheck = true
+					end
+					if sanityCheck then
+						if Contains(upgradableTraits, traitData) or traitData.Rarity == "Legendary" then
+							-- do nothing
+						else
+							table.insert(upgradableTraits, traitData)
+						end
 					end
 				end
 			end
 			if not IsEmpty(upgradableTraits) then
 				while not IsEmpty(upgradableTraits) do
 					local traitData = RemoveRandomValue(upgradableTraits)
-					upgradedTraits[traitData.Name] = true
-					local rarity = GetUpgradedRarity(traitData.Rarity)
-					RemoveTrait(CurrentRun.Hero, traitData.Name)
+					local rarity = nil
+					if not traitData.IsHammerTrait then
+						rarity = GetUpgradedRarity(traitData.Rarity)
+					else
+						rarity = GetUpgradedRarity(traitData.Rarity, mod.HammerRarityUpgradeOrder)
+					end
+					RemoveWeaponTrait(traitData.Name)
 					AddTraitToHero({
 						TraitData = GetProcessedTraitData({
 							Unit = CurrentRun.Hero,
@@ -875,37 +899,43 @@ function mod.HandleBoonManagerClick(screen, button)
 						SkipNewTraitHighlight = true,
 						SkipQuestStatusCheck = true,
 						SkipActivatedTraitUpdate = true,
+						SkipAddToHUD = true
 					})
 				end
-				local ids = {}
-				for i, component in pairs(screen.Components) do
-					if component.ToDestroy then
-						table.insert(ids, component.Id)
-					end
-				end
-				Destroy({ Ids = ids })
-				mod.LoadPageBoons(screen)
-				mod.BoonManagerLoadPage(screen)
+				mod.BoonManagerReloadPage(screen)
 			end
 			return
 		elseif screen.Mode == "Rarity" and screen.LockedModeButton.Substract == true then
 			local upgradableTraits = {}
-			local upgradedTraits = {}
 			for i, traitData in pairs(CurrentRun.Hero.Traits) do
-				if TraitData[traitData.Name] and traitData.Rarity ~= nil and mod.GetDowngradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels ~= nil
-					and traitData.RarityLevels[mod.GetDowngradedRarity(traitData.Rarity)] ~= nil and mod.IsBoonManagerValid(traitData.Name) then
-					if Contains(upgradableTraits, traitData) or traitData.Rarity == "Legendary" then
-					else
-						table.insert(upgradableTraits, traitData)
+				if TraitData[traitData.Name] and traitData.Rarity ~= nil and not traitData.CostumeTrait then
+					local sanityCheck = false
+					if not traitData.IsHammerTrait and mod.GetDowngradedRarity(traitData.Rarity) and traitData.RarityLevels ~= nil and traitData.RarityLevels[mod.GetDowngradedRarity(traitData.Rarity)] ~= nil then
+						sanityCheck = true
+					elseif traitData.IsHammerTrait and mod.GetDowngradedRarity(traitData.Rarity, mod.HammerRarityUpgradeOrder) and traitData.RarityLevels ~= nil and traitData.RarityLevels[mod.GetDowngradedRarity(traitData.Rarity, mod.HammerRarityUpgradeOrder)] ~= nil then
+						sanityCheck = true
+					end
+					if sanityCheck then
+						if Contains(upgradableTraits, traitData) then
+							-- do nothing
+						elseif traitData.Rarity == "Legendary" and not traitData.IsHammerTrait then
+							-- do nothing
+						else
+							table.insert(upgradableTraits, traitData)
+						end
 					end
 				end
 			end
 			if not IsEmpty(upgradableTraits) then
 				while not IsEmpty(upgradableTraits) do
 					local traitData = RemoveRandomValue(upgradableTraits)
-					upgradedTraits[traitData.Name] = true
-					local rarity = mod.GetDowngradedRarity(traitData.Rarity)
-					RemoveTrait(CurrentRun.Hero, traitData.Name)
+					local rarity = nil
+					if not traitData.IsHammerTrait then
+						rarity = mod.GetDowngradedRarity(traitData.Rarity)
+					else
+						rarity = mod.GetDowngradedRarity(traitData.Rarity, mod.HammerRarityUpgradeOrder)
+					end
+					RemoveWeaponTrait(traitData.Name)
 					AddTraitToHero({
 						TraitData = GetProcessedTraitData({
 							Unit = CurrentRun.Hero,
@@ -916,17 +946,10 @@ function mod.HandleBoonManagerClick(screen, button)
 						SkipNewTraitHighlight = true,
 						SkipQuestStatusCheck = true,
 						SkipActivatedTraitUpdate = true,
+						SkipAddToHUD = true
 					})
 				end
-				local ids = {}
-				for i, component in pairs(screen.Components) do
-					if component.ToDestroy then
-						table.insert(ids, component.Id)
-					end
-				end
-				Destroy({ Ids = ids })
-				mod.LoadPageBoons(screen)
-				mod.BoonManagerLoadPage(screen)
+				mod.BoonManagerReloadPage(screen)
 			end
 			return
 		elseif screen.Mode == "Delete" then
@@ -942,12 +965,7 @@ function mod.HandleBoonManagerClick(screen, button)
 				local stacks = GetTraitCount(CurrentRun.Hero, button.Boon.Name)
 				stacks = stacks + 1
 				IncreaseTraitLevel(traitData, stacks)
-				button.Boon.Level = button.Boon.Level + 1
-				ModifyTextBox({
-					Id = button.Background.Id,
-					Text = mod.Locale.BoonManagerLevelDisplay .. button.Boon
-						.Level
-				})
+				mod.BoonManagerReloadPage(screen)
 			end
 			return
 		elseif screen.Mode == "Level" and screen.LockedModeButton.Substract == true then
@@ -956,52 +974,71 @@ function mod.HandleBoonManagerClick(screen, button)
 				local stacks = GetTraitCount(button.Boon.Name)
 				stacks = stacks - 1
 				IncreaseTraitLevel(traitData, stacks)
-				button.Boon.Level = button.Boon.Level - 1
-				ModifyTextBox({
-					Id = button.Background.Id,
-					Text = mod.Locale.BoonManagerLevelDisplay .. button.Boon
-						.Level
-				})
+				mod.BoonManagerReloadPage(screen)
 			end
 			return
 		elseif screen.Mode == "Rarity" and screen.LockedModeButton.Add == true then
-			if TraitData[button.Boon.Name] and button.Boon.Rarity ~= nil and GetUpgradedRarity(button.Boon.Rarity) ~= nil and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[GetUpgradedRarity(button.Boon.Rarity)] ~= nil then
-				local count = GetTraitCount(CurrentRun.Hero, button.Boon)
-				button.Boon.Rarity = GetUpgradedRarity(button.Boon.Rarity)
-				SetColor({ Id = button.Background.Id, Color = Color["BoonPatch" .. button.Boon.Rarity] })
-				RemoveTrait(CurrentRun.Hero, button.Boon.Name)
-				AddTraitToHero({
-					TraitData = GetProcessedTraitData({
-						Unit = CurrentRun.Hero,
-						TraitName = button.Boon
-							.Name,
-						Rarity = button.Boon.Rarity,
-						StackNum = count
-					}),
-					SkipNewTraitHighlight = true,
-					SkipQuestStatusCheck = true,
-					SkipActivatedTraitUpdate = true,
-				})
+			if TraitData[button.Boon.Name] and button.Boon.Rarity ~= nil and not button.Boon.CostumeTrait then
+				local sanityCheck = false
+				if not button.Boon.IsHammerTrait and GetUpgradedRarity(button.Boon.Rarity) and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[GetUpgradedRarity(button.Boon.Rarity)] ~= nil then
+					sanityCheck = true
+				elseif button.Boon.IsHammerTrait and GetUpgradedRarity(button.Boon.Rarity, mod.HammerRarityUpgradeOrder) and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[GetUpgradedRarity(button.Boon.Rarity, mod.HammerRarityUpgradeOrder)] ~= nil then
+					sanityCheck = true
+				end
+				if sanityCheck then
+					if not button.Boon.IsHammerTrait then
+						button.Boon.Rarity = GetUpgradedRarity(button.Boon.Rarity)
+					else
+						button.Boon.Rarity = GetUpgradedRarity(button.Boon.Rarity, mod.HammerRarityUpgradeOrder)
+					end
+					local count = GetTraitCount(CurrentRun.Hero, button.Boon)
+					RemoveWeaponTrait(button.Boon.Name)
+					AddTraitToHero({
+						TraitData = GetProcessedTraitData({
+							Unit = CurrentRun.Hero,
+							TraitName = button.Boon.Name,
+							Rarity = button.Boon.Rarity,
+							StackNum = count
+						}),
+						SkipNewTraitHighlight = true,
+						SkipQuestStatusCheck = true,
+						SkipActivatedTraitUpdate = true,
+						SkipAddToHUD = true
+					})
+					mod.BoonManagerReloadPage(screen)
+				end
 			end
 			return
 		elseif screen.Mode == "Rarity" and screen.LockedModeButton.Substract == true then
-			if TraitData[button.Boon.Name] and button.Boon.Rarity ~= nil and mod.GetDowngradedRarity(button.Boon.Rarity) ~= nil and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[mod.GetDowngradedRarity(button.Boon.Rarity)] ~= nil then
-				local count = GetTraitCount(CurrentRun.Hero, button.Boon)
-				button.Boon.Rarity = mod.GetDowngradedRarity(button.Boon.Rarity)
-				SetColor({ Id = button.Background.Id, Color = Color["BoonPatch" .. button.Boon.Rarity] })
-				RemoveTrait(CurrentRun.Hero, button.Boon.Name)
-				AddTraitToHero({
-					TraitData = GetProcessedTraitData({
-						Unit = CurrentRun.Hero,
-						TraitName = button.Boon
-							.Name,
-						Rarity = button.Boon.Rarity,
-						StackNum = count
-					}),
-					SkipNewTraitHighlight = true,
-					SkipQuestStatusCheck = true,
-					SkipActivatedTraitUpdate = true,
-				})
+			if TraitData[button.Boon.Name] and button.Boon.Rarity ~= nil and not button.Boon.CostumeTrait then
+				local sanityCheck = false
+				if not button.Boon.IsHammerTrait and mod.GetDowngradedRarity(button.Boon.Rarity) and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[mod.GetDowngradedRarity(button.Boon.Rarity)] ~= nil then
+					sanityCheck = true
+				elseif button.Boon.IsHammerTrait and mod.GetDowngradedRarity(button.Boon.Rarity, mod.HammerRarityUpgradeOrder) and button.Boon.RarityLevels ~= nil and button.Boon.RarityLevels[mod.GetDowngradedRarity(button.Boon.Rarity, mod.HammerRarityUpgradeOrder)] ~= nil then
+					sanityCheck = true
+				end
+				if sanityCheck then
+					if not button.Boon.IsHammerTrait then
+						button.Boon.Rarity = mod.GetDowngradedRarity(button.Boon.Rarity)
+					else
+						button.Boon.Rarity = mod.GetDowngradedRarity(button.Boon.Rarity, mod.HammerRarityUpgradeOrder)
+					end
+					local count = GetTraitCount(CurrentRun.Hero, button.Boon)
+					RemoveWeaponTrait(button.Boon.Name)
+					AddTraitToHero({
+						TraitData = GetProcessedTraitData({
+							Unit = CurrentRun.Hero,
+							TraitName = button.Boon.Name,
+							Rarity = button.Boon.Rarity,
+							StackNum = count
+						}),
+						SkipNewTraitHighlight = true,
+						SkipQuestStatusCheck = true,
+						SkipActivatedTraitUpdate = true,
+						SkipAddToHUD = true
+					})
+					mod.BoonManagerReloadPage(screen)
+				end
 			end
 			return
 		elseif screen.Mode == "Delete" then
@@ -1012,34 +1049,30 @@ function mod.HandleBoonManagerClick(screen, button)
 				while bool do
 					bool = mod.HandleSpellRemoval()
 				end
-				local ids = {}
-				for i, component in pairs(screen.Components) do
-					if component.ToDestroy then
-						table.insert(ids, component.Id)
-					end
-				end
-				Destroy({ Ids = ids })
-				mod.LoadPageBoons(screen)
-				mod.BoonManagerLoadPage(screen)
 				return
 			end
-			RemoveTrait(CurrentRun.Hero, button.Boon.Name)
-			local ids = { button.Id, button.Background.Id }
-			if button.Icon then 
-				table.insert(ids, button.Icon.Id)
-			end
-			if button.ElementIcon then
-				table.insert(ids, button.ElementIcon.Id)
-			end
-			Destroy({ Ids = ids })
+			RemoveWeaponTrait(button.Boon.Name)
+			mod.BoonManagerReloadPage(screen)
 			return
 		end
 	end
 end
 
+function mod.BoonManagerReloadPage(screen)
+	local ids = {}
+	for i, component in pairs(screen.Components) do
+		if component.ToDestroy then
+			table.insert(ids, component.Id)
+		end
+	end
+	Destroy({ Ids = ids })
+	mod.LoadPageBoons(screen)
+	mod.BoonManagerLoadPage(screen)
+end
+
 -- removed from base game in Unseen update
-function mod.GetDowngradedRarity( baseRarity )
-	local rarityTable = TraitRarityData.RarityUpgradeOrder
+function mod.GetDowngradedRarity(baseRarity, rarityUpgradeOrder)
+	local rarityTable = rarityUpgradeOrder or TraitRarityData.RarityUpgradeOrder
 
 	if HasHeroTraitValue("ReplaceUpgradedRarityTable") then
 		rarityTable = GetHeroTraitValues("ReplaceUpgradedRarityTable")[1]
@@ -1055,13 +1088,13 @@ function mod.HandleSpellRemoval()
 	for i, traitData in pairs(CurrentRun.Hero.Traits) do
 		if traitData.IsTalent then
 			deletedSomething = true
-			RemoveTrait(CurrentRun.Hero, traitData.Name)
+			RemoveWeaponTrait(traitData.Name)
 		elseif traitData.Slot == "Spell" then
 			deletedSomething = true
 			for _, weapon in pairs(traitData.PreEquipWeapons) do
 				UnequipWeapon({ DestinationId = CurrentRun.Hero.ObjectId, Name = weapon, UnloadPackages = false })
 			end
-			RemoveTrait(CurrentRun.Hero, traitData.Name)
+			RemoveWeaponTrait(traitData.Name)
 			CurrentRun.Hero.SlottedSpell = nil
 			UpdateTalentPointInvestedCache()
 		end
@@ -1107,9 +1140,9 @@ function mod.BoonManagerLoadPage(screen)
 			else
 				displayedTraits[boonData.boon.Name] = true
 				local color = mod.GetLootColorFromTrait(boonData.boon.Name)
+				local tdata = TraitData[boonData.boon.Name]
 				if boonData.boon.Rarity == nil or boonData.boon.Rarity == "Common" then
-					local tdata = TraitData[boonData.boon.Name]
-					if tdata.RarityLevels and tdata.RarityLevels.Legendary then
+					if tdata.RarityLevels and tdata.RarityLevels.Legendary and not tdata.IsHammerTrait then
 						boonData.boon.Rarity = "Legendary"
 					elseif tdata.IsDuoBoon then
 						boonData.boon.Rarity = "Duo"
@@ -1151,7 +1184,8 @@ function mod.BoonManagerLoadPage(screen)
 				upgradeData = GetProcessedTraitData({
 					Unit = CurrentRun.Hero,
 					TraitName = boonData.boon.Name,
-					Rarity = boonData.boon.Rarity
+					Rarity = boonData.boon.Rarity,
+					StackNum = boonData.boon.StackNum or tdata.StackNum
 				})
 				upgradeTitle = GetTraitTooltipTitle(TraitData[boonData.boon.Name])
 				upgradeData.Title = GetTraitTooltipTitle(TraitData[boonData.boon.Name])
@@ -1231,9 +1265,10 @@ function mod.BoonManagerLoadPage(screen)
 				end
 
 				color = Color["BoonPatch" .. rarity]
-				if upgradeData.CustomRarityColor then
-					color = upgradeData.CustomRarityColor
-				elseif upgradeData.CustomRarityName == "Boon_Infusion" then
+				-- if upgradeData.CustomRarityColor then
+				-- 	color = upgradeData.CustomRarityColor
+				-- else
+				if upgradeData.CustomRarityName == "Boon_Infusion" then
 					color = Color.BoonPatchElemental
 				end
 				SetColor({

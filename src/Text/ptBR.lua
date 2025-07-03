@@ -10,6 +10,7 @@ public.AddLocale("pt-BR", {
 	BoonSelectorRareButton = "Rara",
 	BoonSelectorEpicButton = "Épica",
 	BoonSelectorHeroicButton = "Heróica",
+	BoonSelectorLegendaryButton = "Lendária",
 
 	BoonManagerTitle = "Gerenciador de Bênçãos",
 	BoonManagerSubtitle = "Selecione o Modo Nível ou Modo Raridade novamente para alternar entre os submodos Evoluir(+) e Diminuir(-)",

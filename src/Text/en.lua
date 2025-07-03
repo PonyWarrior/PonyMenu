@@ -10,6 +10,7 @@ public.AddLocale("en", {
 	BoonSelectorRareButton = "Rare",
 	BoonSelectorEpicButton = "Epic",
 	BoonSelectorHeroicButton = "Heroic",
+	BoonSelectorLegendaryButton = "Legendary",
 
 	BoonManagerTitle = "Boon Manager",
 	BoonManagerSubtitle = "Click Level Mode or Rarity Mode again to switch Add(+) and Substract(-) submodes",

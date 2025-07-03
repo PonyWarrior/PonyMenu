@@ -93,6 +93,31 @@ function mod.setupScreenData()
 								Rarity = "Common",
 							},
 						},
+						LegendaryButton =
+						{
+							Name = "ButtonDefault",
+							Group = "Combat_Menu_TraitTray",
+							Scale = 1.2,
+							ScaleX = 0.8,
+							OffsetX = -350,
+							OffsetY = 480,
+							Text = mod.Locale.BoonSelectorLegendaryButton,
+							TextArgs =
+							{
+								FontSize = 22,
+								Width = 720,
+								Color = Color.BoonPatchLegendary,
+								Font = "P22UndergroundSCMedium",
+								ShadowBlur = 0,
+								ShadowColor = { 0, 0, 0, 1 },
+								ShadowOffset = { 0, 2 },
+								Justification = "Center"
+							},
+							Data = {
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'ChangeBoonSelectorRarity',
+								Rarity = "Legendary",
+							},
+						},
 						RareButton =
 						{
 							Name = "ButtonDefault",
@@ -741,7 +766,7 @@ function mod.setupCommandData()
 			IconScale = 0.6,
 			Name = "WeaponUpgrade",
 			Type = "Boon",
-			NoRarity = true
+			Hammer = true
 		},
 		{
 			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Arachne",
