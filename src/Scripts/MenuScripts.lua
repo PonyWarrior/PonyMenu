@@ -157,6 +157,7 @@ function mod.GiveBoonToPlayer(screen, button)
 			SkipNewTraitHighlight = true,
 			SkipQuestStatusCheck = true,
 			SkipActivatedTraitUpdate = true,
+			FromLoot = true
 		})
 		screen.BoonsList[screen.CurrentPage][button.Index] = nil
 		local ids = { button.Id }

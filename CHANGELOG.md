@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed boons with 'on acquiring' effects not triggering when obtained with the boon selector
+
 ## [0.11.0] - 2025-07-03
 
 ### Changed
