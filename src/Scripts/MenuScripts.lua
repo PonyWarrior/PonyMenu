@@ -1383,10 +1383,9 @@ function mod.BoonManagerPageButtons(screen, menu)
 	end
 	if screen.CurrentPage ~= screen.FirstPage then
 		components.LeftPageButton = CreateScreenComponent({
-			Name = "ButtonCodexLeft",
+			Name = "ButtonCodexUp",
 			Scale = 1.2,
-			Sound =
-			"/SFX/Menu Sounds/GeneralWhooshMENU",
+			Sound = "/SFX/Menu Sounds/GeneralWhooshMENU",
 			Group = "Combat_Menu_TraitTray"
 		})
 		Attach({ Id = components.LeftPageButton.Id, DestinationId = components.Background.Id, OffsetX = -650, OffsetY = -380 })
@@ -1397,10 +1396,9 @@ function mod.BoonManagerPageButtons(screen, menu)
 	end
 	if screen.CurrentPage ~= screen.LastPage then
 		components.RightPageButton = CreateScreenComponent({
-			Name = "ButtonCodexRight",
+			Name = "ButtonCodexDown",
 			Scale = 1.2,
-			Sound =
-			"/SFX/Menu Sounds/GeneralWhooshMENU",
+			Sound = "/SFX/Menu Sounds/GeneralWhooshMENU",
 			Group = "Combat_Menu_TraitTray"
 		})
 		Attach({ Id = components.RightPageButton.Id, DestinationId = components.Background.Id, OffsetX = 650, OffsetY = -380 })

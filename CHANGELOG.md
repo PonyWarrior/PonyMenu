@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Temporary fix for missing arrow buttons in all menus
+
 ## [0.11.1] - 2025-08-14
 
 - Fixed boons with 'on acquiring' effects not triggering when obtained with the boon selector
