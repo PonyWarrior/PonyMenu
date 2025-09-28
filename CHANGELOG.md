@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.3] - 2025-09-28
+
 - Fixed a crash when trying to give yourself consumables while having the Sea Star boon
 
 ## [0.11.2] - 2025-09-26
@@ -189,7 +191,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.2...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.3...HEAD
+[0.11.3]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.2...0.11.3
 [0.11.2]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.1...0.11.2
 [0.11.1]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.0...0.11.1
 [0.11.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.10.14...0.11.0
