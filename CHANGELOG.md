@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed a crash when trying to give yourself consumables while having the Sea Star boon
+
 ## [0.11.2] - 2025-09-26
 
 - Temporary fix for missing arrow buttons in all menus

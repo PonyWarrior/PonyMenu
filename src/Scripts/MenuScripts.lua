@@ -1678,6 +1678,7 @@ function mod.ConsumableSelectorLoadPage(screen)
 				--Skip
 			else
 				local purchaseButtonKey = "PurchaseButton" .. consumableData.index
+				consumableData.consumable.CanDuplicate = false -- sea star fix
 				consumableData.consumable.ObjectId = purchaseButtonKey
 				screen.Components[purchaseButtonKey] = CreateScreenComponent({
 					Name = "ButtonDefault",
@@ -1753,7 +1754,7 @@ function mod.GiveConsumableToPlayer(screen, button)
 		end
 		mod.CloseConsumableSelector(screen)
 	end
-	UseConsumableItem(button.Consumable, {}, CurrentRun.Hero)
+	UseConsumableItem(button.Consumable, { TargetHero = true })
 end
 
 function mod.DoesPlayerHaveHex()
