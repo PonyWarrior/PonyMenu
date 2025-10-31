@@ -795,7 +795,7 @@ function mod.setupCommandData()
 		{
 			IconPath = "PonyWarrior-PonyMenu\\Hades",
 			IconScale = 0.3,
-			Name = "NPC_LordHades_01",
+			Name = "NPC_Hades_Field_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true

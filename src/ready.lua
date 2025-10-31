@@ -58,7 +58,7 @@ local function setupMainData()
 		NPC_Arachne_01 = {},
 		NPC_Narcissus_01 = {},
 		NPC_Echo_01 = {},
-		NPC_LordHades_01 = {},
+		NPC_Hades_Field_01 = {},
 		NPC_Medea_01 = {},
 		NPC_Icarus_01 = {},
 		NPC_Circe_01 = {},
@@ -522,7 +522,7 @@ function mod.GetLootColor(upgradeName)
 		color = Color.EchoVoice
 	elseif upgradeName == "NPC_Narcissus_01" then
 		color = Color.NarcissusVoice
-	elseif upgradeName == "NPC_LordHades_01" then
+	elseif upgradeName == "NPC_Hades_Field_01" then
 		color = UnitSetData.NPC_Hades.NPC_Hades_Field_01.LootColor
 	elseif upgradeName == "NPC_Medea_01" then
 		color = Color.MedeaVoice
