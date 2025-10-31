@@ -49,7 +49,7 @@ local function setupMainData()
 		DemeterUpgrade = {},
 		HephaestusUpgrade = {},
 		HestiaUpgrade = {},
-		ArtemisUpgrade = {},
+		NPC_Artemis_Field_01 = {},
 		HermesUpgrade = {},
 		HeraUpgrade = {},
 		TrialUpgrade = {},
@@ -58,7 +58,7 @@ local function setupMainData()
 		NPC_Arachne_01 = {},
 		NPC_Narcissus_01 = {},
 		NPC_Echo_01 = {},
-		NPC_LordHades_01 = {},
+		NPC_Hades_Field_01 = {},
 		NPC_Medea_01 = {},
 		NPC_Icarus_01 = {},
 		NPC_Circe_01 = {},
@@ -462,96 +462,45 @@ function mod.Command(screen, button)
 end
 
 function mod.PopulateBoonData(upgradeName)
-	local godName = string.gsub(upgradeName, 'Upgrade', '')
 	local index = 0
 
-	if LootSetData[godName] ~= nil and LootSetData[godName][upgradeName].WeaponUpgrades ~= nil then
-		for k, v in pairs(LootSetData[godName][upgradeName].WeaponUpgrades) do
-			index = index + 1
-			mod.BoonData[upgradeName][index] = v
-		end
+	if mod.BoonData[upgradeName] ~= nil and not IsEmpty(mod.BoonData[upgradeName]) then
+		return
 	end
 
-	if LootSetData[godName] ~= nil and LootSetData[godName][upgradeName].Traits ~= nil then
-		for k, v in pairs(LootSetData[godName][upgradeName].Traits) do
-			index = index + 1
-			mod.BoonData[upgradeName][index] = v
-		end
-	end
-
-	if mod.BoonData[upgradeName] == nil or IsEmpty(mod.BoonData[upgradeName]) then
-		if upgradeName == "SpellDrop" then
-			for k, v in pairs(QuestData.QuestDarkSorceries.CompleteGameStateRequirements[1].HasAll) do
+	if upgradeName == "WeaponUpgrade" then
+		for k, trait in pairs(LootSetData.Loot[upgradeName].Traits) do
+			local boon = TraitData[trait]
+			if boon.CodexWeapon == GetEquippedWeapon() then
 				index = index + 1
-				mod.BoonData[upgradeName][index] = v
+				mod.BoonData[upgradeName][index] = trait
 			end
-		elseif upgradeName == "WeaponUpgrade" then
-			local wp = GetEquippedWeapon()
-			for k, v in pairs(LootSetData.Loot[upgradeName].Traits) do
-				local boon = TraitData[v]
-				if boon.CodexWeapon == GetEquippedWeapon() then
-					index = index + 1
-					mod.BoonData.WeaponUpgrade[index] = v
-				end
+		end
+		return
+	end
+
+	if ScreenData.BoonInfo.TraitSortOrder[upgradeName] == nil then
+		return
+	end
+
+	for k, trait in pairs(ScreenData.BoonInfo.TraitSortOrder[upgradeName]) do
+		if upgradeName == "SpellDrop" then
+			if string.match(trait, "Trait$") then
+				index = index + 1
+				mod.BoonData[upgradeName][index] = trait
 			end
 		elseif upgradeName == "TrialUpgrade" then
-			for k, v in pairs(LootSetData.Chaos.TrialUpgrade.PermanentTraits) do
+			if string.match(trait, "Blessing$") then
 				index = index + 1
-				mod.BoonData[upgradeName][index] = v
+				mod.BoonData[upgradeName][index] = trait
 			end
-		elseif upgradeName == "NPC_Arachne_01" then
-			for k, v in pairs(PresetEventArgs.ArachneCostumeChoices.UpgradeOptions) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v.ItemName
-			end
-		elseif upgradeName == "ArtemisUpgrade" then
-			for k, v in pairs(UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_Narcissus_01" then
-			for k, v in pairs(UnitSetData.NPC_Narcissus.NPC_Narcissus_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_Echo_01" then
-			for k, v in pairs(UnitSetData.NPC_Echo.NPC_Echo_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_LordHades_01" then
-			for k, v in pairs(UnitSetData.NPC_Hades.NPC_Hades_Field_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_Medea_01" then
-			for k, v in pairs(UnitSetData.NPC_Medea.NPC_Medea_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_Icarus_01" then
-			for k, v in pairs(UnitSetData.NPC_Icarus.NPC_Icarus_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_Circe_01" then
-			for k, v in pairs(UnitSetData.NPC_Circe.NPC_Circe_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_Athena_01" then
-			for k, v in pairs(UnitSetData.NPC_Athena.NPC_Athena_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
-		elseif upgradeName == "NPC_Dionysus_01" then
-			for k, v in pairs(UnitSetData.NPC_Dionysus.NPC_Dionysus_01.Traits) do
-				index = index + 1
-				mod.BoonData[upgradeName][index] = v
-			end
+		else
+			index = index + 1
+			mod.BoonData[upgradeName][index] = trait
 		end
 	end
 end
+
 
 function mod.GetLootColor(upgradeName)
 	local godName = string.gsub(upgradeName, 'Upgrade', '')
@@ -567,13 +516,13 @@ function mod.GetLootColor(upgradeName)
 		color = LootSetData.Loot[upgradeName].LootColor
 	elseif upgradeName == "NPC_Arachne_01" then
 		color = Color.ArachneVoice
-	elseif upgradeName == "ArtemisUpgrade" then
+	elseif upgradeName == "NPC_Artemis_Field_01" then
 		color = UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.LootColor
 	elseif upgradeName == "NPC_Echo_01" then
 		color = Color.EchoVoice
 	elseif upgradeName == "NPC_Narcissus_01" then
 		color = Color.NarcissusVoice
-	elseif upgradeName == "NPC_LordHades_01" then
+	elseif upgradeName == "NPC_Hades_Field_01" then
 		color = UnitSetData.NPC_Hades.NPC_Hades_Field_01.LootColor
 	elseif upgradeName == "NPC_Medea_01" then
 		color = Color.MedeaVoice

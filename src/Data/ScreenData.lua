@@ -731,7 +731,7 @@ function mod.setupCommandData()
 		{
 			IconPath = "PonyWarrior-PonyMenu\\Artemis",
 			IconScale = 0.3,
-			Name = "ArtemisUpgrade",
+			Name = "NPC_Artemis_Field_01",
 			Type = "Boon",
 			NoSpawn = true
 		},
@@ -795,7 +795,7 @@ function mod.setupCommandData()
 		{
 			IconPath = "PonyWarrior-PonyMenu\\Hades",
 			IconScale = 0.3,
-			Name = "NPC_LordHades_01",
+			Name = "NPC_Hades_Field_01",
 			Type = "Boon",
 			NoRarity = true,
 			NoSpawn = true
@@ -903,6 +903,22 @@ function mod.setupCommandData()
 			Function = _PLUGIN.guid .. '.' .. 'LoadState'
 		},
 	}
+	local mods = rom.mods
+	local zanncdwbl_droppableGods = mods["zannc-Droppable_Gods"]
+
+	if zanncdwbl_droppableGods then
+		for _, v in ipairs(mod.CommandData) do
+            if v.Name == "NPC_Artemis_Field_01" then
+				v.NoSpawn = false
+			end
+            if v.Name == "NPC_Athena_01" then
+                v.NoSpawn = false
+            end
+			if v.Name == "NPC_Dionysus_01" then
+				v.NoSpawn = false
+			end
+		end
+	end
 end
 
 mod.Internal = ModUtil.UpValues(function()

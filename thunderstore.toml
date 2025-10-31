@@ -5,15 +5,15 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "PonyWarrior"
 name = "PonyMenu"
-versionNumber = "0.11.3"
+versionNumber = "0.11.4"
 description = "Successor to Codex Menu. Lets you use different commands to test or cheat."
 websiteUrl = "https://github.com/PonyWarrior/PonyMenu"
 containsNsfwContent = false
 
 [package.dependencies]
 SGG_Modding-DemonDaemon = "1.0.0"
-Hell2Modding-Hell2Modding = "1.0.28"
-SGG_Modding-ENVY = "1.0.1"
+Hell2Modding-Hell2Modding = "1.0.73"
+LuaENVY-ENVY = "1.2.0"
 SGG_Modding-Chalk = "2.0.2"
 SGG_Modding-ReLoad = "1.0.1"
 SGG_Modding-SJSON = "1.0.0"
