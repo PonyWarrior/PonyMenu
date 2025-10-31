@@ -109,6 +109,19 @@ function mod.BoonSelectorReloadPage(screen)
 end
 
 function mod.SpawnBoon(screen, button)
+	local mods = rom.mods
+	local zanncdwbl_droppableGods = mods["zannc-Droppable_Gods"]
+
+    if zanncdwbl_droppableGods then
+        if screen.Upgrade == "NPC_Artemis_Field_01" then
+            screen.Upgrade = "ArtemisUpgrade"
+        elseif screen.Upgrade == "NPC_Athena_01" then
+            screen.Upgrade = "AthenaUpgrade"
+        elseif screen.Upgrade == "NPC_Dionysus_01" then
+            screen.Upgrade = "DionysusUpgrade"
+        end
+    end
+    
 	CreateLoot({ Name = screen.Upgrade, OffsetX = 100, SpawnPoint = CurrentRun.Hero.ObjectId })
 	mod.CloseBoonSelector(screen)
 end
