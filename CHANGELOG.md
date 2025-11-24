@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.11.4] - 2025-10-31
+- made command data public for 3rd party access @zerp
 
 ## [0.11.3] - 2025-09-28
 
