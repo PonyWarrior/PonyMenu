@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.5] - 2025-11-24
+
 - made command data public for 3rd party access @zerp
 
 ## [0.11.3] - 2025-09-28
@@ -193,7 +195,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.4...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.5...HEAD
+[0.11.5]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.4...0.11.5
 [0.11.4]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.3...0.11.4
 [0.11.3]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.2...0.11.3
 [0.11.2]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.1...0.11.2
