@@ -678,231 +678,235 @@ function mod.setupScreenData()
 	})
 end
 
+mod.CommandData = {
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Zeus",
+		IconScale = 0.3,
+		Name = "ZeusUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Poseidon",
+		IconScale = 0.3,
+		Name = "PoseidonUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Aphrodite",
+		IconScale = 0.3,
+		Name = "AphroditeUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Ares",
+		IconScale = 0.3,
+		Name = "AresUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Apollo",
+		IconScale = 0.3,
+		Name = "ApolloUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Demeter",
+		IconScale = 0.3,
+		Name = "DemeterUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Hephaestus",
+		IconScale = 0.3,
+		Name = "HephaestusUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Hestia",
+		IconScale = 0.3,
+		Name = "HestiaUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Artemis",
+		IconScale = 0.3,
+		Name = "NPC_Artemis_Field_01",
+		Type = "Boon",
+		NoSpawn = true
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Hermes",
+		IconScale = 0.3,
+		Name = "HermesUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Hera",
+		IconScale = 0.3,
+		Name = "HeraUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Chaos",
+		IconScale = 0.3,
+		Name = "TrialUpgrade",
+		Type = "Boon"
+	},
+	{
+		IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Selene",
+		IconScale = 0.2,
+		Name = "SpellDrop",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		Icon = "WeaponUpgradeSymbol",
+		IconScale = 0.6,
+		Name = "WeaponUpgrade",
+		Type = "Boon",
+		Hammer = true
+	},
+	{
+		IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Arachne",
+		IconScale = 0.2,
+		Name = "NPC_Arachne_01",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Narcissus",
+		IconScale = 0.2,
+		Name = "NPC_Narcissus_01",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Echo",
+		IconScale = 0.2,
+		Name = "NPC_Echo_01",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Hades",
+		IconScale = 0.3,
+		Name = "NPC_Hades_Field_01",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Medea",
+		IconScale = 0.2,
+		Name = "NPC_Medea_01",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Icarus",
+		IconScale = 0.2,
+		Name = "NPC_Icarus_01",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Circe",
+		IconScale = 0.2,
+		Name = "NPC_Circe_01",
+		Type = "Boon",
+		NoRarity = true,
+		NoSpawn = true
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Athena",
+		IconScale = 0.3,
+		Name = "NPC_Athena_01",
+		Type = "Boon",
+		NoSpawn = true
+	},
+	{
+		IconPath = "PonyWarrior-PonyMenu\\Dionysus",
+		IconScale = 0.3,
+		Name = "NPC_Dionysus_01",
+		Type = "Boon",
+		NoSpawn = true
+	},
+	{
+		Icon = "TrashButtonFlash",
+		IconScale = 0.6,
+		Name = mod.Locale.ClearAllBoons,
+		Description = mod.Locale.ClearAllBoonsDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. "ClearAllBoons"
+	},
+	{
+		Icon = "CharonPointsDrop",
+		IconScale = 0.6,
+		Name = mod.Locale.BoonManagerTitle,
+		Description = mod.Locale.BoonManagerDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. "OpenBoonManager"
+	},
+	{
+		IconPath = "GUI\\Screens\\Inventory\\Icon-Resources",
+		IconScale = 0.6,
+		Name = mod.Locale.ResourceMenuTitle,
+		Description = mod.Locale.ResourceMenuDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. "OpenResourceMenu"
+	},
+	{
+		IconPath = "Items\\Resources\\Common\\MoneyDrop_Text",
+		IconScale = 0.8,
+		Name = mod.Locale.ConsumableSelectorTitle,
+		Description = mod.Locale.ConsumableSelectorDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. "OpenConsumableSelector"
+	},
+	{
+		IconPath = "GUI\\Icons\\LobAmmo",
+		IconScale = 0.8,
+		Name = mod.Locale.BossSelectorTitle,
+		Description = mod.Locale.BossSelectorDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. "OpenBossSelector"
+	},
+	{
+		IconPath = "GUI\\Graybox\\Button_Close",
+		IconScale = 0.7,
+		Name = mod.Locale.KillPlayerTitle,
+		Description = mod.Locale.KillPlayerDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. 'KillPlayer'
+	},
+	{
+		IconPath = "GUI\\Shell\\CloudSyncConflict",
+		IconScale = 0.5,
+		Name = mod.Locale.SaveStateTitle,
+		Description = mod.Locale.SaveStateDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. 'SaveState'
+	},
+	{
+		IconPath = "GUI\\Shell\\CloudSuccess",
+		IconScale = 0.5,
+		Name = mod.Locale.LoadStateTitle,
+		Description = mod.Locale.LoadStateDescription,
+		Type = "Command",
+		Function = _PLUGIN.guid .. '.' .. 'LoadState'
+	},
+}
+
+public.CommandData = mod.CommandData
+
 function mod.setupCommandData()
-	mod.CommandData = {
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Zeus",
-			IconScale = 0.3,
-			Name = "ZeusUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Poseidon",
-			IconScale = 0.3,
-			Name = "PoseidonUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Aphrodite",
-			IconScale = 0.3,
-			Name = "AphroditeUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Ares",
-			IconScale = 0.3,
-			Name = "AresUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Apollo",
-			IconScale = 0.3,
-			Name = "ApolloUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Demeter",
-			IconScale = 0.3,
-			Name = "DemeterUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Hephaestus",
-			IconScale = 0.3,
-			Name = "HephaestusUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Hestia",
-			IconScale = 0.3,
-			Name = "HestiaUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Artemis",
-			IconScale = 0.3,
-			Name = "NPC_Artemis_Field_01",
-			Type = "Boon",
-			NoSpawn = true
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Hermes",
-			IconScale = 0.3,
-			Name = "HermesUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Hera",
-			IconScale = 0.3,
-			Name = "HeraUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Chaos",
-			IconScale = 0.3,
-			Name = "TrialUpgrade",
-			Type = "Boon"
-		},
-		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Selene",
-			IconScale = 0.2,
-			Name = "SpellDrop",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			Icon = "WeaponUpgradeSymbol",
-			IconScale = 0.6,
-			Name = "WeaponUpgrade",
-			Type = "Boon",
-			Hammer = true
-		},
-		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Arachne",
-			IconScale = 0.2,
-			Name = "NPC_Arachne_01",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Narcissus",
-			IconScale = 0.2,
-			Name = "NPC_Narcissus_01",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Echo",
-			IconScale = 0.2,
-			Name = "NPC_Echo_01",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Hades",
-			IconScale = 0.3,
-			Name = "NPC_Hades_Field_01",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Medea",
-			IconScale = 0.2,
-			Name = "NPC_Medea_01",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Icarus",
-			IconScale = 0.2,
-			Name = "NPC_Icarus_01",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			IconPath = "GUI\\Screens\\AwardMenu\\KeepsakeMaxGift\\KeepsakeMaxGift_big\\Circe",
-			IconScale = 0.2,
-			Name = "NPC_Circe_01",
-			Type = "Boon",
-			NoRarity = true,
-			NoSpawn = true
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Athena",
-			IconScale = 0.3,
-			Name = "NPC_Athena_01",
-			Type = "Boon",
-			NoSpawn = true
-		},
-		{
-			IconPath = "PonyWarrior-PonyMenu\\Dionysus",
-			IconScale = 0.3,
-			Name = "NPC_Dionysus_01",
-			Type = "Boon",
-			NoSpawn = true
-		},
-		{
-			Icon = "TrashButtonFlash",
-			IconScale = 0.6,
-			Name = mod.Locale.ClearAllBoons,
-			Description = mod.Locale.ClearAllBoonsDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. "ClearAllBoons"
-		},
-		{
-			Icon = "CharonPointsDrop",
-			IconScale = 0.6,
-			Name = mod.Locale.BoonManagerTitle,
-			Description = mod.Locale.BoonManagerDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. "OpenBoonManager"
-		},
-		{
-			IconPath = "GUI\\Screens\\Inventory\\Icon-Resources",
-			IconScale = 0.6,
-			Name = mod.Locale.ResourceMenuTitle,
-			Description = mod.Locale.ResourceMenuDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. "OpenResourceMenu"
-		},
-		{
-			IconPath = "Items\\Resources\\Common\\MoneyDrop_Text",
-			IconScale = 0.8,
-			Name = mod.Locale.ConsumableSelectorTitle,
-			Description = mod.Locale.ConsumableSelectorDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. "OpenConsumableSelector"
-		},
-		{
-			IconPath = "GUI\\Icons\\LobAmmo",
-			IconScale = 0.8,
-			Name = mod.Locale.BossSelectorTitle,
-			Description = mod.Locale.BossSelectorDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. "OpenBossSelector"
-		},
-		{
-			IconPath = "GUI\\Graybox\\Button_Close",
-			IconScale = 0.7,
-			Name = mod.Locale.KillPlayerTitle,
-			Description = mod.Locale.KillPlayerDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. 'KillPlayer'
-		},
-		{
-			IconPath = "GUI\\Shell\\CloudSyncConflict",
-			IconScale = 0.5,
-			Name = mod.Locale.SaveStateTitle,
-			Description = mod.Locale.SaveStateDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. 'SaveState'
-		},
-		{
-			IconPath = "GUI\\Shell\\CloudSuccess",
-			IconScale = 0.5,
-			Name = mod.Locale.LoadStateTitle,
-			Description = mod.Locale.LoadStateDescription,
-			Type = "Command",
-			Function = _PLUGIN.guid .. '.' .. 'LoadState'
-		},
-	}
+	
 	local mods = rom.mods
 	local zanncdwbl_droppableGods = mods["zannc-Droppable_Gods"]
 
