@@ -905,29 +905,9 @@ mod.CommandData = {
 
 public.CommandData = mod.CommandData
 
-function mod.setupCommandData()
-	
-	local mods = rom.mods
-	local zanncdwbl_droppableGods = mods["zannc-Droppable_Gods"]
-
-	if zanncdwbl_droppableGods then
-		for _, v in ipairs(mod.CommandData) do
-            if v.Name == "NPC_Artemis_Field_01" then
-				v.NoSpawn = false
-			end
-            if v.Name == "NPC_Athena_01" then
-                v.NoSpawn = false
-            end
-			if v.Name == "NPC_Dionysus_01" then
-				v.NoSpawn = false
-			end
-		end
-	end
-end
-
 mod.Internal = ModUtil.UpValues(function()
-	return mod.setupScreenData, mod.setupCommandData
+	return mod.setupScreenData
 end)
 
-mod.setupCommandData()
+
 mod.setupScreenData()
