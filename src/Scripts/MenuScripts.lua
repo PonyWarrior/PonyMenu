@@ -109,7 +109,7 @@ function mod.BoonSelectorReloadPage(screen)
 end
 
 function mod.SpawnBoon(screen, button)
-	CreateLoot({ Name = screen.Upgrade, OffsetX = 100, SpawnPoint = CurrentRun.Hero.ObjectId })
+	CreateLoot({ Name = screen.Upgrade, OffsetX = 100, SpawnPoint = CurrentRun.Hero.ObjectId, AutoLoadPackages = true})
 	mod.CloseBoonSelector(screen)
 end
 
