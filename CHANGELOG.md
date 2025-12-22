@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.7] - 2025-12-22
+
 - Add mouse scrolling for boon selector like pages
 
 ## [0.11.6] - 2025-12-10
@@ -201,7 +203,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.6...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.7...HEAD
+[0.11.7]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.6...0.11.7
 [0.11.6]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.5...0.11.6
 [0.11.5]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.4...0.11.5
 [0.11.4]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.3...0.11.4
