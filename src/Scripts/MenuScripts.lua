@@ -1393,6 +1393,7 @@ function mod.BoonManagerPageButtons(screen, menu)
 		components.LeftPageButton.Menu = menu
 		components.LeftPageButton.Direction = "Left"
 		components.LeftPageButton.ControlHotkeys = { "MenuLeft", "Left" }
+		components.LeftPageButton.MouseControlHotkeys = { "MenuUp" }
 	end
 	if screen.CurrentPage ~= screen.LastPage then
 		components.RightPageButton = CreateScreenComponent({
@@ -1406,6 +1407,7 @@ function mod.BoonManagerPageButtons(screen, menu)
 		components.RightPageButton.Menu = menu
 		components.RightPageButton.Direction = "Right"
 		components.RightPageButton.ControlHotkeys = { "MenuRight", "Right" }
+		components.RightPageButton.MouseControlHotkeys = { "MenuDown" }
 	end
 end
 

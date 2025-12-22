@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add mouse scrolling for boon selector like pages
+
 ## [0.11.6] - 2025-12-10
 
 - Remove Droppable Gods compat (done in their mod now)
