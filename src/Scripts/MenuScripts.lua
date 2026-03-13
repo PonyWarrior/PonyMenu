@@ -1769,3 +1769,209 @@ function mod.DoesPlayerHaveHex()
 end
 
 --#endregion
+
+--#region STATE SELECTOR
+
+function mod.OpenStateSelectorSave(screen, button)
+	if IsScreenOpen("StateSelector") then
+		return
+	end
+	mod.UpdateScreenData()
+
+	local screen = DeepCopyTable(ScreenData.StateSelector)
+	screen.Mode = "Save"
+	screen.FirstPage = 0
+	screen.LastPage = 0
+	screen.CurrentPage = screen.FirstPage
+	screen.AwaitingNameInputForSlot = nil
+	local components = screen.Components
+
+	OnScreenOpened(screen)
+	HideCombatUI(screen.Name)
+	CreateScreenFromData(screen, screen.ComponentData)
+
+	mod.StateSelectorLoadPage(screen)
+
+	SetColor({ Id = components.BackgroundTint.Id, Color = Color.Black })
+	SetAlpha({ Id = components.BackgroundTint.Id, Fraction = 0.0, Duration = 0 })
+	SetAlpha({ Id = components.BackgroundTint.Id, Fraction = 0.9, Duration = 0.3 })
+	wait(0.3)
+
+	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = "Combat_Menu_TraitTray" })
+	screen.KeepOpen = true
+	
+	HandleScreenInput(screen)
+end
+
+function mod.OpenStateSelectorLoad(screen, button)
+	if IsScreenOpen("StateSelector") then
+		return
+	end
+	mod.UpdateScreenData()
+
+	local screen = DeepCopyTable(ScreenData.StateSelector)
+	screen.Mode = "Load"
+	screen.FirstPage = 0
+	screen.LastPage = 0
+	screen.CurrentPage = screen.FirstPage
+	local components = screen.Components
+
+	OnScreenOpened(screen)
+	HideCombatUI(screen.Name)
+	CreateScreenFromData(screen, screen.ComponentData)
+
+	mod.StateSelectorLoadPage(screen)
+
+	SetColor({ Id = components.BackgroundTint.Id, Color = Color.Black })
+	SetAlpha({ Id = components.BackgroundTint.Id, Fraction = 0.0, Duration = 0 })
+	SetAlpha({ Id = components.BackgroundTint.Id, Fraction = 0.9, Duration = 0.3 })
+	wait(0.3)
+
+	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = "Combat_Menu_TraitTray" })
+	screen.KeepOpen = true
+	HandleScreenInput(screen)
+end
+
+function mod.CloseStateSelector(screen)
+	mod.AwaitingNameInputForSlot = nil
+	ShowCombatUI(screen.Name)
+	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = nil })
+	OnScreenCloseStarted(screen)
+	CloseScreen(GetAllIds(screen.Components), 0.15)
+	OnScreenCloseFinished(screen)
+	notifyExistingWaiters("StateSelector")
+end
+
+function mod.StateSelectorLoadPage(screen)
+	local boonsPerRow = 4
+	local maxRows = 6
+	local maxSlots = boonsPerRow * maxRows
+	local columnOffset = 410
+	local rowOffset = 140
+
+	screen.RowStartX = -(columnOffset * (boonsPerRow - 1)) / 2
+	screen.RowStartY = -(rowOffset * (maxRows - 1)) / 2
+
+	if data.SavedStates == nil then
+		data.SavedStates = {}
+	end
+
+	for index = 1, maxSlots do
+		local rowIndex = math.floor((index - 1) / boonsPerRow)
+		local offsetX = screen.RowStartX + columnOffset * ((index - 1) % boonsPerRow)
+		local offsetY = screen.RowStartY + rowOffset * rowIndex
+		
+		local purchaseButtonKey = "SlotButton" .. index
+		screen.Components[purchaseButtonKey] = CreateScreenComponent({
+			Name = "ButtonDefault",
+			Group = "Combat_Menu_TraitTray",
+			ScaleX = 1.25,
+			ScaleY = 1.25,
+			ToDestroy = true
+		})
+		SetInteractProperty({
+			DestinationId = screen.Components[purchaseButtonKey].Id,
+			Property = "TooltipOffsetY",
+			Value = 100
+		})
+		
+		screen.Components[purchaseButtonKey].SlotIndex = index
+		if screen.Mode == "Save" then
+			screen.Components[purchaseButtonKey].OnPressedFunctionName = mod.TriggerSaveState
+		else
+			screen.Components[purchaseButtonKey].OnPressedFunctionName = mod.TriggerLoadState
+		end
+		
+		Attach({
+			Id = screen.Components[purchaseButtonKey].Id,
+			DestinationId = screen.Components.Background.Id,
+			OffsetX = offsetX,
+			OffsetY = offsetY
+		})
+		
+		local titleText = ""
+		local descText = ""
+		local textOffsetX = 0
+		local iconAnimation = nil
+
+		if data.SavedStates[index] ~= nil and data.SavedStates[index].Weapon ~= nil then
+			local saveObj = data.SavedStates[index]
+			
+			titleText = saveObj.Weapon or "UnknownWeapon"
+			
+			if saveObj.Aspect and saveObj.Aspect.Name then
+			    descText = saveObj.Aspect.Name
+			    if TraitData[saveObj.Aspect.Name] ~= nil and TraitData[saveObj.Aspect.Name].Icon ~= nil then
+			        iconAnimation = TraitData[saveObj.Aspect.Name].Icon
+			    end
+			end
+			
+			if iconAnimation then
+			    textOffsetX = 35
+			end
+		else
+		    titleText = mod.Locale.EmptySlot
+		end
+
+		CreateTextBox({
+			Id = screen.Components[purchaseButtonKey].Id,
+			Text = titleText,
+			FontSize = 20,
+			OffsetX = textOffsetX,
+			OffsetY = -15,
+			Color = Color.White,
+			Font = "P22UndergroundSCMedium",
+			ShadowBlur = 0,
+			ShadowColor = { 0, 0, 0, 1 },
+			ShadowOffset = { 0, 2 },
+			Justification = "Center"
+		})
+
+		CreateTextBox({
+			Id = screen.Components[purchaseButtonKey].Id,
+			Text = descText,
+			FontSize = 16,
+			OffsetX = textOffsetX,
+			OffsetY = 15,
+			Color = { 0.8, 0.8, 0.8, 1 },
+			Font = "P22UndergroundSCMedium",
+			ShadowBlur = 0,
+			ShadowColor = { 0, 0, 0, 1 },
+			ShadowOffset = { 0, 2 },
+			Justification = "Center"
+		})
+		
+		if iconAnimation then
+			local icon = {
+				Name = "BlankObstacle",
+				Animation = iconAnimation,
+				Scale = 0.35,
+				Group = "Combat_Menu_TraitTray",
+				ToDestroy = true
+			}
+			screen.Components[purchaseButtonKey .. "Icon"] = CreateScreenComponent(icon)
+			screen.Components[purchaseButtonKey].Icon = screen.Components[purchaseButtonKey .. "Icon"]
+			Attach({
+				Id = screen.Components[purchaseButtonKey .. "Icon"].Id,
+				DestinationId = screen.Components[purchaseButtonKey].Id,
+				OffsetX = -75,
+				OffsetY = -5
+			})
+		end
+	end
+end
+
+function mod.TriggerSaveState(screen, button)
+	mod.SaveState(button.SlotIndex)
+	mod.CloseStateSelector(screen)
+end
+
+function mod.TriggerLoadState(screen, button)
+	mod.LoadState(nil, button.SlotIndex)
+	mod.CloseStateSelector(screen)
+end
+
+--#endregion
+
+--#endregion
+
