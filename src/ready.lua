@@ -648,6 +648,7 @@ function CreateNewCustomRun(room)
 	-- EquipFamiliar(nil, { Unit = CurrentRun.Hero, FamiliarName = GameState.EquippedFamiliar, SkipNewTraitHighlight = true })
 	-- EquipWeaponUpgrade(CurrentRun.Hero, { SkipNewTraitHighlight = true })
 	-- EquipMetaUpgrades(CurrentRun.Hero, { SkipNewTraitHighlight = true })
+	InitHeroLastStands(CurrentRun.Hero)
 	mod.LoadState(true)
 	UpdateRunHistoryCache(CurrentRun)
 
@@ -662,8 +663,6 @@ function CreateNewCustomRun(room)
 	if ConfigOptionCache.EasyMode then
 		CurrentRun.EasyModeLevel = GameState.EasyModeLevel
 	end
-
-	InitHeroLastStands(CurrentRun.Hero)
 
 	InitializeRewardStores(CurrentRun)
 	--SelectBannedEliteAttributes( CurrentRun )
@@ -743,23 +742,23 @@ function mod.SaveState(slotIndex)
 			Keepsake = GameState.LastAwardTrait,
 			Assist = GameState.LastAssistTrait,
 			Familiar = GameState.EquippedFamiliar,
-			Hex = nil
+			Hex = nil,
+			LastStands = nil
 		}
 		
 		for i, traitData in pairs(CurrentRun.Hero.Traits) do
-			if
+			if traitData.Slot and traitData.Slot == "Familiar" then
+				-- Skip, familiar is handled separately
+			elseif traitData.Slot and traitData.Slot == "Spell" then
+				-- Skip, Hex is handled separately
+			elseif
 				not traitData.MetaUpgrade
 				and traitData.Name ~= data.SavedStates[slotIndex].Weapon
 				and traitData.Name ~= data.SavedStates[slotIndex].Aspect.Name
 				and traitData.Name ~= data.SavedStates[slotIndex].Keepsake
 				and traitData.Name ~= data.SavedStates[slotIndex].Assist
-				and traitData.Name ~= data.SavedStates[slotIndex].Familiar
 			then
-				if traitData.Slot and traitData.Slot == "Spell" then
-					data.SavedStates[slotIndex].Hex = traitData.Name
-				else
-					table.insert(data.SavedStates[slotIndex].Traits, { Name = traitData.Name, Rarity = traitData.Rarity, StackNum = traitData.StackNum })
-				end
+				table.insert(data.SavedStates[slotIndex].Traits, { Name = traitData.Name, Rarity = traitData.Rarity, StackNum = traitData.StackNum })
 			elseif traitData.MetaUpgrade then
 				table.insert(data.SavedStates[slotIndex].MetaUpgrades, {
 					TraitName = traitData.Name,
@@ -768,6 +767,13 @@ function mod.SaveState(slotIndex)
 					SourceName = traitData.Name
 				})
 			end
+		end
+
+		if CurrentRun.Hero.SlottedSpell ~= nil then
+			data.SavedStates[slotIndex].Hex = DeepCopyTable(CurrentRun.Hero.SlottedSpell)
+		end
+		if CurrentRun.Hero.LastStands ~= nil then
+			data.SavedStates[slotIndex].LastStands = DeepCopyTable(CurrentRun.Hero.LastStands)
 		end
 		SaveCheckpoint({ DevSaveName = CreateDevSaveName(CurrentRun) })
 		PlaySound({ Name = "/SFX/WrathEndingWarning", Id = CurrentRun.Hero.ObjectId })
@@ -830,14 +836,28 @@ function mod.LoadState(newRun, slotIndex)
 			})
 		end
 		if stateData.Hex ~= nil then
-			AddTraitToHero({
-				TraitName = stateData.Hex,
-				SkipNewTraitHighlight = true,
-				SkipQuestStatusCheck = true,
-				SkipActivatedTraitUpdate = true,
-			})
-			-- CurrentRun.Hero.SlottedSpell = DeepCopyTable(SpellData[stateData.Hex])
-			-- CurrentRun.Hero.SlottedSpell.Talents = DeepCopyTable(CreateTalentTree(SpellData[stateData.Hex]))
+			if type(stateData.Hex) == "table" then
+				AddTraitToHero({
+					TraitName = stateData.Hex.TraitName,
+					SkipNewTraitHighlight = true,
+					SkipQuestStatusCheck = true,
+					SkipActivatedTraitUpdate = true,
+				})
+				CurrentRun.Hero.SlottedSpell = DeepCopyTable(stateData.Hex)
+			else
+				AddTraitToHero({
+					TraitName = stateData.Hex,
+					SkipNewTraitHighlight = true,
+					SkipQuestStatusCheck = true,
+					SkipActivatedTraitUpdate = true,
+				})
+				local spellName = stateData.Hex:gsub("Trait", "")
+				spellName = spellName:gsub("Spell", "")
+				if SpellData[spellName] then
+					CurrentRun.Hero.SlottedSpell = DeepCopyTable(SpellData[spellName])
+					CurrentRun.Hero.SlottedSpell.Talents = DeepCopyTable(CreateTalentTree(SpellData[spellName]))
+				end
+			end
 		end
 		for _, traitData in pairs(stateData.MetaUpgrades) do
 			AddTraitToHero({
@@ -849,6 +869,15 @@ function mod.LoadState(newRun, slotIndex)
 				CustomMultiplier = traitData.CustomMultiplier,
 				SourceName = traitData.SourceName,
 			})
+		end
+		
+		if stateData.LastStands ~= nil then
+			CurrentRun.Hero.LastStands = DeepCopyTable(stateData.LastStands)
+		else
+			InitHeroLastStands(CurrentRun.Hero)
+		end
+		if UpdateLifePips then
+			UpdateLifePips(CurrentRun.Hero)
 		end
 	end
 	
