@@ -392,6 +392,19 @@ end
 
 --#region RESOURCE MENU
 
+function mod.CheckFinalBossDropEligible(resource)
+	local blockedResources = {
+		["MixerQBoss"] = true,
+		["MixerIBoss"] = true,
+		["HadesSpearPoints"] = true,
+		["MixerMythic"] = true,
+	}
+	if blockedResources[resource] and not game.GameState.ReachedTrueEnding then
+		return false
+	end
+	return true
+end
+
 function mod.OpenResourceMenu(screen, button)
 	if IsScreenOpen("ResourceMenu") then
 		return
@@ -414,7 +427,8 @@ function mod.OpenResourceMenu(screen, button)
 	screen.ResourceList = {}
 	for _, category in ipairs(ScreenData.InventoryScreen.ItemCategories) do
 		for k, resource in ipairs(category) do
-			if type(resource) == 'string' and not Contains(displayedResources, resource) then
+			if type(resource) == 'string' and not Contains(displayedResources, resource) and
+					mod.CheckFinalBossDropEligible(resource) then
 				table.insert(displayedResources, resource)
 				local rowOffset = 100
 				local columnOffset = 400
