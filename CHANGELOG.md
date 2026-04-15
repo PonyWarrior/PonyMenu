@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed crash on opening inventory on latest patch
+- Added saved state management system @imhlq
+    - Save and Load state menu functions now opens the State Selector screen, which contains many slots for saved states which can be accessed from any saved game
+- Added Typhon and all Rivals version of bosses to the Boss Selector
+    - Take the vow of rivals to toggle between regular and rival version of bosses
+- Implemented new saved state features into Boss Selector
+    - After picking your boss you are prompted to pick a saved state
+- Fixed pressing escape pausing the game instead of closing custom screens @zerp
+- Blocked story resources from appearing in the resource menu until true ending to prevent save bricking @zerp
 - Fixes for delete all boons/traits, @zerp
 
 ## [0.11.7] - 2025-12-22
