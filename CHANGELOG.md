@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-04-15
+
 - Fix overlapping text in boss selector
 
 ## [0.12.0] - 2026-04-15
@@ -218,7 +220,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.0...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.1...HEAD
+[0.12.1]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.7...0.12.0
 [0.11.7]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.6...0.11.7
 [0.11.6]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.5...0.11.6
