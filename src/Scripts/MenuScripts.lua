@@ -1485,6 +1485,17 @@ function mod.OpenBossSelector()
 	local screen = DeepCopyTable(ScreenData.BossSelector)
 	local components = screen.Components
 	local children = screen.ComponentData.Background.Children
+	local itemOrder = screen.ItemOrder.Regular
+	local bossData = screen.BossData.Regular
+	local color = Color.White
+
+	if IsBossDifficultyShrineUpgradeActive() then
+		-- rival
+		itemOrder = screen.ItemOrder.Rival
+		bossData = screen.BossData.Rival
+		color = Color.Purple
+	end
+
 	HideCombatUI(screen.Name)
 	OnScreenOpened(screen)
 	CreateScreenFromData(screen, screen.ComponentData)
@@ -1494,7 +1505,7 @@ function mod.OpenBossSelector()
 
 	--Display
 
-	if data.SavedState then
+	if data.SavedStates then
 		local index = 0
 		local rowOffset = 400
 		local columnOffset = 400
@@ -1503,9 +1514,9 @@ function mod.OpenBossSelector()
 		local rowoffsetX = 350
 		local rowoffsetY = 350
 
-		for _, value in ipairs(screen.ItemOrder) do
-			if GameState.RoomCountCache[value] then
-				local boss = screen.BossData[value]
+		for _, value in ipairs(itemOrder) do
+			-- if GameState.RoomCountCache[value] then
+				local boss = bossData[value]
 				boss.Room = DeepCopyTable(RoomData[value])
 
 				local key = "Boss" .. index
@@ -1550,8 +1561,9 @@ function mod.OpenBossSelector()
 				local titleText = ShallowCopyTable(screen.TitleText)
 				titleText.Id = components[buttonKey].Id
 				titleText.Text = boss.Name
+				titleText.Color = color
 				CreateTextBox(titleText)
-			end
+			-- end
 		end
 	else
 		local txt = mod.Locale.BossSelectorNoSavedState
@@ -1582,14 +1594,19 @@ function mod.OpenBossSelector()
 end
 
 function mod.HandleBossSelection(screen, button)
-	if data.SavedState == nil then
+	print("Boss Select")
+	if data.SavedStates == nil or IsEmpty(data.SavedStates) then
 		return
 	end
-	local boss = button.Boss
+	data.SelectedBoss = button.Boss
 	mod.CloseBossSelectScreen(screen)
+	mod.OpenStateSelectorLoad(screen, button, true)
+end
 
+function mod.DoBossHandling()
+	print("Boss Handling")
+	local boss = data.SelectedBoss
 	boss.Room.KillHeroOnCompletion = true
-
 	boss.Room.NoReward = true
 	boss.Room.ForcedReward = nil
 	boss.Room.HasHarvestPoint = false
@@ -1817,7 +1834,7 @@ function mod.OpenStateSelectorSave(screen, button)
 	HandleScreenInput(screen)
 end
 
-function mod.OpenStateSelectorLoad(screen, button)
+function mod.OpenStateSelectorLoad(screen, button, isBossSelectMode)
 	if IsScreenOpen("StateSelector") then
 		return
 	end
@@ -1829,6 +1846,9 @@ function mod.OpenStateSelectorLoad(screen, button)
 	screen.LastPage = 0
 	screen.CurrentPage = screen.FirstPage
 	local components = screen.Components
+	if isBossSelectMode then
+		screen.isBossSelectMode = true
+	end
 
 	OnScreenOpened(screen)
 	HideCombatUI(screen.Name)
@@ -1981,8 +2001,15 @@ function mod.TriggerSaveState(screen, button)
 end
 
 function mod.TriggerLoadState(screen, button)
-	mod.LoadState(nil, button.SlotIndex)
-	mod.CloseStateSelector(screen)
+	if not screen.isBossSelectMode then
+		mod.LoadState(nil, button.SlotIndex)
+		mod.CloseStateSelector(screen)
+	else
+		print("Pick state")
+		data.SelectedSavedStateSlot = button.SlotIndex
+		mod.CloseStateSelector(screen)
+		mod.DoBossHandling()
+	end
 end
 
 --#endregion

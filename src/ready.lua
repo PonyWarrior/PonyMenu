@@ -209,7 +209,7 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 		for i, resourceName in ipairs( category ) do
 
 			local resourceData = ResourceData[resourceName]
-			if CanShowResourceInInventory( resourceData ) then
+			if CanShowResourceInInventory( resourceData, screen.Args ) then
 
 				local textLines = nil
 				local canBeGifted = false
@@ -653,7 +653,7 @@ function CreateNewCustomRun(room)
 	-- EquipWeaponUpgrade(CurrentRun.Hero, { SkipNewTraitHighlight = true })
 	-- EquipMetaUpgrades(CurrentRun.Hero, { SkipNewTraitHighlight = true })
 	InitHeroLastStands(CurrentRun.Hero)
-	mod.LoadState(true)
+	mod.LoadState(true, data.SelectedSavedStateSlot)
 	UpdateRunHistoryCache(CurrentRun)
 
 	CurrentRun.BonusUnusedWeaponName = GetRandomUnequippedWeapon()
@@ -705,6 +705,7 @@ function StartNewCustomRun(room)
 
 	HideCombatUI("StartOver")
 	currentRun = CreateNewCustomRun(room)
+
 	StopMusicianMusic({ Duration = 1.0 })
 	ResetObjectives()
 
@@ -723,7 +724,10 @@ function StartNewCustomRun(room)
 	AddInputBlock({ Name = "MapLoad" })
 	AddTimerBlock( CurrentRun, "MapLoad" )
 
+
+
 	LoadMap({ Name = currentRun.CurrentRoom.Name, ResetBinks = true })
+
 end
 
 function mod.KillPlayer()
