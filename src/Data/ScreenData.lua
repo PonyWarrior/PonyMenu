@@ -7,6 +7,7 @@ function mod.setupScreenData()
 			Rarity = "Common",
 			RowStartX = -(ScreenCenterX * 0.65),
 			RowStartY = -(ScreenCenterY * 0.5),
+			BlockPause = true,
 			ComponentData =
 			{
 				DefaultGroup = "Combat_Menu_TraitTray_Backing",
@@ -219,6 +220,7 @@ function mod.setupScreenData()
 			Amount = 0,
 			RowStartX = -(ScreenCenterX * 0.65),
 			RowStartY = -(ScreenCenterY * 0.5),
+			BlockPause = true,
 			ComponentData =
 			{
 				DefaultGroup = "Combat_Menu_TraitTray_Backing",
@@ -497,6 +499,7 @@ function mod.setupScreenData()
 			Name = "BossSelector",
 			RowStartX = 200,
 			RowStartY = ScreenCenterY,
+			BlockPause = true,
 			IncrementX = 190,
 			ItemOrder = {
 				"F_Boss01",
@@ -617,6 +620,7 @@ function mod.setupScreenData()
 			Name = "ConsumableSelector",
 			RowStartX = -(ScreenCenterX * 0.65),
 			RowStartY = -(ScreenCenterY * 0.5),
+			BlockPause = true,
 
 			ComponentData =
 			{
