@@ -1508,14 +1508,14 @@ function mod.OpenBossSelector()
 	if data.SavedStates then
 		local index = 0
 		local rowOffset = 400
-		local columnOffset = 400
+		local columnOffset = 495
 		local boonsPerRow = 4
 		local rowsPerPage = 99
-		local rowoffsetX = 350
+		local rowoffsetX = 210
 		local rowoffsetY = 350
 
 		for _, value in ipairs(itemOrder) do
-			-- if GameState.RoomCountCache[value] then
+			if GameState.RoomCountCache[value] then
 				local boss = bossData[value]
 				boss.Room = DeepCopyTable(RoomData[value])
 
@@ -1563,7 +1563,7 @@ function mod.OpenBossSelector()
 				titleText.Text = boss.Name
 				titleText.Color = color
 				CreateTextBox(titleText)
-			-- end
+			end
 		end
 	else
 		local txt = mod.Locale.BossSelectorNoSavedState
