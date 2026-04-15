@@ -552,15 +552,19 @@ function mod.GetLootColorFromTrait(traitName)
 end
 
 function mod.RemoveAllTraits()
-	for i, traitData in pairs(CurrentRun.Hero.Traits) do
-		RemoveTrait(CurrentRun.Hero, traitData.Name)	
+	-- deep copy table since Hero.Traits table is modified during deletion
+	local traitCopy = game.DeepCopyTable(CurrentRun.Hero.Traits)
+	for i, traitData in pairs(traitCopy) do
+		RemoveTrait(CurrentRun.Hero, traitData.Name)
 	end
 end
 
 function mod.RemoveAllBoons()
-	for i, traitData in pairs(CurrentRun.Hero.Traits) do
-		-- Only remove boons
-		if traitData.RarityLevels ~= nil and traitData.Slot ~= "Keepsake" and traitData.Slot ~= "Aspect" and traitData.UpgradeResourceCost == nil then
+	-- deep copy table since Hero.Traits table is modified during deletion
+	local traitCopy = game.DeepCopyTable(CurrentRun.Hero.Traits)
+	for i, traitData in pairs(traitCopy) do
+		-- Only remove boons, if it can be in boon manager it can be deleted
+		if mod.IsBoonManagerValid(traitData.Name) then
 			RemoveTrait(CurrentRun.Hero, traitData.Name)
 		end
 	end

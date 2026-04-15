@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixes for delete all boons/traits, @zerp
+
 ## [0.11.7] - 2025-12-22
 
 - Add mouse scrolling for boon selector like pages
