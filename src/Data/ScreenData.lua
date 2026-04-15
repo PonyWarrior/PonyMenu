@@ -674,6 +674,71 @@ function mod.setupScreenData()
 					}
 				},
 			}
+		},
+
+		StateSelector = {
+			Components = {},
+			OpenSound = "/SFX/Menu Sounds/HadesLocationTextAppear",
+			Name = "StateSelector",
+			RowStartX = -(ScreenCenterX * 0.65),
+			RowStartY = -(ScreenCenterY * 0.35),
+
+			ComponentData =
+			{
+				DefaultGroup = "Combat_Menu_TraitTray",
+				UseNativeScreenCenter = true,
+				Order = {
+					"BackgroundTint",
+					"Background"
+				},
+
+				BackgroundTint =
+				{
+					Graphic = "rectangle01",
+					GroupName = "Combat_Menu",
+					Scale = 10,
+					X = ScreenCenterX,
+					Y = ScreenCenterY,
+				},
+
+				Background =
+				{
+					Graphic = "Box_FullScreen",
+					GroupName = "Combat_Menu",
+					X = ScreenCenterX,
+					Y = ScreenCenterY,
+					Scale = 1.15,
+					Text = mod.Locale.SelectSlot,
+					TextArgs =
+					{
+						FontSize = 32,
+						Width = 750,
+						OffsetY = -(ScreenCenterY * 0.825),
+						Color = Color.White,
+						Font = "P22UndergroundSCHeavy",
+						ShadowBlur = 0,
+						ShadowColor = { 0, 0, 0, 0 },
+						ShadowOffset = { 0, 3 },
+					},
+
+					Children =
+					{
+						CloseButton =
+						{
+							Graphic = "ButtonClose",
+							GroupName = "Combat_Menu_TraitTray",
+							Scale = 0.7,
+							OffsetX = 0,
+							OffsetY = ScreenCenterY - 70,
+							Data =
+							{
+								OnPressedFunctionName = _PLUGIN.guid .. '.' .. 'CloseStateSelector',
+								ControlHotkeys = { "Cancel", },
+							},
+						},
+					}
+				},
+			}
 		}
 	})
 end
@@ -891,7 +956,7 @@ mod.CommandData = {
 		Name = mod.Locale.SaveStateTitle,
 		Description = mod.Locale.SaveStateDescription,
 		Type = "Command",
-		Function = _PLUGIN.guid .. '.' .. 'SaveState'
+		Function = _PLUGIN.guid .. '.' .. 'OpenStateSelectorSave'
 	},
 	{
 		IconPath = "GUI\\Shell\\CloudSuccess",
@@ -899,7 +964,7 @@ mod.CommandData = {
 		Name = mod.Locale.LoadStateTitle,
 		Description = mod.Locale.LoadStateDescription,
 		Type = "Command",
-		Function = _PLUGIN.guid .. '.' .. 'LoadState'
+		Function = _PLUGIN.guid .. '.' .. 'OpenStateSelectorLoad'
 	},
 }
 

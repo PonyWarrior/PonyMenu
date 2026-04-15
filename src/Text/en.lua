@@ -44,6 +44,8 @@ public.AddLocale("en", {
 	SaveStateLoaded = "State loaded!",
 
 	ConsumableSelectorTitle = "Consumable Selector",
-	ConsumableSelectorDescription = "Give yourself any consumable item."
+	ConsumableSelectorDescription = "Give yourself any consumable item.",
 
+	SelectSlot = "Select Slot",
+	EmptySlot = "Empty",
 })

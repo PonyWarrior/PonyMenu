@@ -44,5 +44,8 @@ public.AddLocale("zh-CN", {
 	SaveStateLoaded = "已加载套装!",
 
 	ConsumableSelectorTitle = "物品选择器",
-	ConsumableSelectorDescription = "立即获得任意卡戎物品及地图物品。"
+	ConsumableSelectorDescription = "立即获得任意卡戎物品及地图物品。",
+
+	SelectSlot = "选择套装",
+	EmptySlot = "空",
 })
