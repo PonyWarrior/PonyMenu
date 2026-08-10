@@ -376,7 +376,7 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 			local itemData = mod.CommandData[index]
 			local button = CreateScreenComponent({
 				Name = "ButtonInventoryItem",
-				Scale = itemData.IconScale or 1.0,
+				Scale = 0.34,
 				Sound = "/SFX/Menu Sounds/GodBoonMenuClose",
 				Group = "Combat_Menu_Overlay",
 				X = resourceLocation.X,
@@ -387,7 +387,7 @@ ModUtil.Path.Override("InventoryScreenDisplayCategory", function(screen, categor
 			button.ItemData = itemData
 			components[index] = button
 			SetAnimation({ DestinationId = button.Id, Name = itemData.IconPath or itemData.Icon })
-
+			SetScale({ Id = button.Id, Fraction = button.ItemData.IconScale or 1.0, Duration = 0.0, SkipGeometryUpdate = true })
 			-- CreateTextBoxWithScreenFormat( screen, button, "ResourceCountFormat", { Text = itemData.Name or "WIP" } )
 
 			button.MouseOverSound = "/SFX/Menu Sounds/DialoguePanelOutMenu"
