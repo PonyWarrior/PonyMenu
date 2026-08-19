@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fix button overlapping and navigation issues in the Inventory tab - zerp
+
 ## [0.12.2] - 2026-04-25
 
 - Only populate hammers compatible with the current aspect equipped
