@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.3] - 2026-08-19
+
 - Allow spawning a Selene boon instead of needing to select a specific Hex in the menu @NikkelM
 - Fix button overlapping and navigation issues in the Inventory tab - zerp
 
@@ -227,7 +229,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version of the mod!
 
-[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.2...HEAD
+[unreleased]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.3...HEAD
+[0.12.3]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.2...0.12.3
 [0.12.2]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.1...0.12.2
 [0.12.1]: https://github.com/PonyWarrior/PonyMenu/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/PonyWarrior/PonyMenu/compare/0.11.7...0.12.0
