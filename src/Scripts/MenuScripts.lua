@@ -40,6 +40,7 @@ function mod.OpenBoonSelector(screen, button)
 	if itemData.NoSpawn then
 		children.SpawnButton = nil
 	end
+	screen.IsConsumable = itemData.Consumable
 
 	OnScreenOpened(screen)
 	CreateScreenFromData(screen, screen.ComponentData)
@@ -109,7 +110,16 @@ function mod.BoonSelectorReloadPage(screen)
 end
 
 function mod.SpawnBoon(screen, button)
-	CreateLoot({ Name = screen.Upgrade, OffsetX = 100, SpawnPoint = CurrentRun.Hero.ObjectId, AutoLoadPackages = true})
+	if screen.IsConsumable then
+		local consumableId = SpawnObstacle({ Name = screen.Upgrade, DestinationId = CurrentRun.Hero.ObjectId, Group = "Standing", OffsetX = 100 })
+		local reward = CreateConsumableItem(consumableId, screen.Upgrade, 0, { RunProgressUpgradeEligible = true, AutoLoadPackages = true, IgnoreAssert = true })
+		if reward ~= nil then
+			reward.IgnorePurchase = true
+			reward.PurchaseRequirements = nil
+		end
+	else
+		CreateLoot({ Name = screen.Upgrade, OffsetX = 100, SpawnPoint = CurrentRun.Hero.ObjectId, AutoLoadPackages = true})
+	end
 	mod.CloseBoonSelector(screen)
 end
 

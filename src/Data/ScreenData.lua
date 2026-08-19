@@ -877,7 +877,7 @@ mod.CommandData = {
 		Name = "SpellDrop",
 		Type = "Boon",
 		NoRarity = true,
-		NoSpawn = true
+		Consumable = true
 	},
 	{
 		Icon = "WeaponUpgradeSymbol",
